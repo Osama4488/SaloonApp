@@ -1,0 +1,49 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="LoginSignupButtonStyle" parent="Base.Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:background">@drawable/round_button</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SmallTVPrimary" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+    </style>
+
+    <style name="MediumTVPrimary" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+    <style name="LargeTVPrimary" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+    </style>
+
+    <style name="MediumTVBlack" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+    <style name="LargeTVBlack" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+    </style>
+
+</resources>

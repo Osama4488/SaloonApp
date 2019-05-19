@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.LoginActivity"
+    android:background="@color/colorWhite">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="15pt"
+        android:layout_marginRight="15pt">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/user_signup_frag_nameTIL"
+            android:layout_marginBottom="2pt"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/user_signup_frag_nameTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Full Name"
+                android:inputType="text"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/user_signup_frag_emailTIL"
+            android:layout_below="@id/user_signup_frag_nameTIL"
+            android:layout_marginBottom="2pt"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/user_signup_frag_emailTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Email"
+                android:inputType="textEmailAddress"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/user_signup_frag_contactTIL"
+            android:layout_below="@id/user_signup_frag_emailTIL"
+            android:layout_marginBottom="2pt"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/user_signup_frag_contactTILTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Number"
+                android:inputType="number"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/user_signup_frag_passTIL"
+            android:layout_below="@id/user_signup_frag_contactTIL"
+            android:layout_marginBottom="2pt"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/user_signup_frag_passTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Password"
+                android:inputType="textPassword"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/user_signup_frag_confrimPassTIL"
+            android:layout_below="@id/user_signup_frag_passTIL"
+            android:layout_marginBottom="2pt"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/user_signup_frag_confrimPassTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Confrim Password"
+                android:inputType="textPassword"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/login_loginBN"
+            android:layout_below="@id/user_signup_frag_confrimPassTIL"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SIGNUP"
+            style="@style/LoginSignupButtonStyle"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
