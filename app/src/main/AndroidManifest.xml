@@ -23,16 +23,18 @@
         <activity
             android:name=".Activities.MapActivity"
             android:label="@string/title_activity_map">
+
+        </activity>
+        <activity android:name=".Activities.SignupActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.SignupActivity">
+        <activity android:name=".Activities.LoginActivity">
 
         </activity>
-        <activity android:name=".Activities.LoginActivity"></activity>
         <activity android:name=".Activities.MainActivity"></activity>
     </application>
 
