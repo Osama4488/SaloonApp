@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.LoginActivity"
-    android:background="@color/colorWhite">
+    android:background="@color/colorWhite"
+    android:focusable="true">
 
     <RelativeLayout
         android:id="@+id/topRL"
@@ -16,6 +17,7 @@
         android:paddingBottom="2pt">
 
         <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/signup_backIV"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="3pt"

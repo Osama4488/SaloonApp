@@ -340,6 +340,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     public void onClick(View v) {
         if (v == okBN) {
             saveLatLng();
+            finish();
         } else if (v == backIV) {
             onBackPressed();
         } else if (v == currentLocationFAB) {
@@ -352,6 +353,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         SharedPreferences.Editor editor = getSharedPreferences("MapLatLng", MODE_PRIVATE).edit();
         editor.putFloat("lat", (float) saveLatLng.latitude);
         editor.putFloat("lng", (float) saveLatLng.longitude);
+        editor.apply();
         Toast.makeText(this, saveLatLng.latitude + " : " + saveLatLng.longitude, Toast.LENGTH_SHORT).show();
 
     }
