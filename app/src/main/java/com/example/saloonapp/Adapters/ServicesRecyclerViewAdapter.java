@@ -2,6 +2,7 @@ package com.example.saloonapp.Adapters;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -12,7 +13,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,6 +23,7 @@ import android.view.Window;
 import android.view.animation.CycleInterpolator;
 import android.widget.Toast;
 
+import com.example.saloonapp.Activities.SubServiceActivity;
 import com.example.saloonapp.Models.ServicesModel;
 import com.example.saloonapp.R;
 
@@ -36,7 +37,7 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
     // Dialog Controls
     private AlertDialog updateServiceDialog;
     private AppCompatTextView dialog_serviceTitleTV;
-    private AppCompatButton dialog_addServiceBN;
+    private AppCompatButton dialog_updateServiceBN;
     private TextInputLayout dialog_serviceNameTIL;
     private AppCompatEditText dialog_serviceNameET;
     private AppCompatImageButton dialog_closeIB;
@@ -60,18 +61,23 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
         final ServicesModel item = servicesModelList.get(i);
         if (item != null) {
             itemServiceViewHolder.serviceNameTV.setText(item.getServiceName());
+
             itemServiceViewHolder.serviceDeleteIB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     deleteDialog(item.getServiceName(), i);
                 }
             });
+
             itemServiceViewHolder.serviceCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(activity, "Card View is pressed" + item.getServiceId(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(activity, SubServiceActivity.class);
+                    intent.putExtra("serviceName", item.getServiceName());
+                    activity.startActivity(intent);
                 }
             });
+
             itemServiceViewHolder.serviceCV.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -172,7 +178,7 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
 
     private void bindDialogListeners() {
         dialog_closeIB.setOnClickListener(this);
-        dialog_addServiceBN.setOnClickListener(this);
+        dialog_updateServiceBN.setOnClickListener(this);
     }
 
     private void bindDialogControls(View dialogView, int position) {
@@ -180,15 +186,18 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
         dialog_serviceNameTIL = dialogView.findViewById(R.id.dialog_serviceNameTIL);
         dialog_serviceNameET = dialogView.findViewById(R.id.dialog_serviceNameET);
         dialog_closeIB = dialogView.findViewById(R.id.dialog_closeIB);
-        dialog_addServiceBN = dialogView.findViewById(R.id.dialog_addServiceBN);
+        dialog_updateServiceBN = dialogView.findViewById(R.id.dialog_addServiceBN);
 
-        dialog_serviceNameTIL.setHint(servicesModelList.get(position).getServiceName());
+        dialog_serviceNameET.setHint(servicesModelList.get(position).getServiceName());
+
+        dialog_serviceNameTIL.setHint("");
+
         dialog_serviceTitleTV.setText("Update Service");
-        dialog_addServiceBN.setText("Update");
+        dialog_updateServiceBN.setText("Update");
         servicePosition = position;
     }
 
-    public void deleteDialog(String serviceName, final int position) {
+    public void deleteDialog(final String serviceName, final int position) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
         alertDialogBuilder.setTitle("Remove Service?");
         alertDialogBuilder.setMessage("Are you sure, You want to remove " + serviceName.toUpperCase() + " service?");
@@ -196,7 +205,7 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 deleteServiceAtPosition(position);
-                Toast.makeText(activity, "Service Removed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, serviceName + " Removed", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -216,7 +225,7 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
     public void onClick(View v) {
         if (v == dialog_closeIB) {
             updateServiceDialog.dismiss();
-        } else if (v == dialog_addServiceBN) {
+        } else if (v == dialog_updateServiceBN) {
             updateService(servicePosition);
         }
     }

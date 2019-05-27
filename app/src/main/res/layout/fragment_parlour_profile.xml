@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.ParlourProfileFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:isScrollContainer="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/rellay1"
+                android:isScrollContainer="true"
+                android:layout_width="match_parent"
+                android:layout_height="80pt"
+                android:background="@drawable/gradient">
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/parlour_frag_editIB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_back_arrow"
+                    android:background="@android:color/transparent"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="10pt"
+                    android:tint="@color/colorPrimaryDark"/>
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/parlour_frag_parlourNameET"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginBottom="5pt"
+                    android:enabled="false"
+                    android:background="@null"
+                    android:text="Parlour Name"
+                    android:inputType="text"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="30sp" />
+
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/parlour_frag_parlourAddressET"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/parlour_frag_parlourNameET"
+                    android:layout_centerHorizontal="true"
+                    android:inputType="text"
+                    android:textAllCaps="true"
+                    android:enabled="false"
+                    android:background="@null"
+                    android:text="Address"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/linlay1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rellay1"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="10pt"
+                    android:paddingBottom="10pt"
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_weight=".5"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/profile_frag_numberET"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Number"
+                        android:layout_margin="1pt"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:enabled="false"
+                        android:background="@null"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".5"
+                    android:background="@color/colorPrimaryDark"
+                    android:gravity="center"
+                    android:paddingTop="10pt"
+                    android:paddingBottom="10pt"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/profile_frag_emailET"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Email"
+                        android:enabled="false"
+                        android:background="@null"
+                        android:layout_margin="1pt"
+                        android:gravity="center"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/profile_frag_changePassBN"
+                android:layout_below="@id/linlay1"
+                android:layout_margin="5pt"
+                style="@style/LoginSignupButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Change Password" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+</FrameLayout>

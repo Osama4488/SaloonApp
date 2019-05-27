@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/round_dialog"
+    android:gravity="center">
+
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/dialog_closeIB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_back_arrow"
+        android:layout_marginTop="5pt"
+        android:layout_marginLeft="5pt"
+        android:layout_alignParentStart="true"
+        android:background="@android:color/transparent"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/dialog_expertTitleTV"
+        android:layout_below="@id/dialog_closeIB"
+        android:layout_margin="5pt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Expert"
+        android:textStyle="bold"
+        android:gravity="center"
+        style="@style/LargeTVPrimary"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/dialog_subServiceNameTIL"
+        android:layout_marginBottom="5pt"
+        android:layout_below="@id/dialog_expertTitleTV"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/dialog_subServiceNameET"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Name"
+            android:inputType="text"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/dialog_subServicePriceTIL"
+        android:layout_marginBottom="5pt"
+        android:layout_below="@id/dialog_subServiceNameTIL"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/dialog_subServicePriceET"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Expertise"
+            android:inputType="text"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/dialog_subServiceDescriptionTIL"
+        android:layout_marginBottom="5pt"
+        android:layout_below="@id/dialog_subServicePriceTIL"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/dialog_subServiceDescriptionET"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Experience"
+            android:inputType="number"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/dialog_addExpertBN"
+        android:layout_below="@id/dialog_subServiceDescriptionTIL"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        style="@style/LoginSignupButtonStyle"/>
+
+</RelativeLayout>

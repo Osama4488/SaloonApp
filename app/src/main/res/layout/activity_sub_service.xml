@@ -4,22 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragments.ServicesFragment">
+    tools:context=".Activities.SubServiceActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include
+            android:id="@+id/toolbarLayout"
+            layout="@layout/app_toolbar" />
+
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/services_frag_RV"
+            android:id="@+id/subService_RV"
+            android:layout_below="@id/toolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/services_frag_addServiceFAB"
-        app:layout_anchor="@id/services_frag_RV"
+        android:id="@+id/subService_addSubServiceFAB"
+        app:layout_anchor="@id/subService_RV"
         app:layout_anchorGravity="bottom|right"
         android:layout_margin="10pt"
         app:backgroundTint="@color/colorPrimary"

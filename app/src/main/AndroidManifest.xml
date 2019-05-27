@@ -14,16 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activities.SubServiceActivity"></activity>
         <activity
             android:name=".Activities.ParlourDrawerActivity"
             android:label="@string/title_activity_parlour_drawer"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <meta-data
@@ -32,10 +28,15 @@
 
         <activity
             android:name=".Activities.MapActivity"
-            android:label="@string/title_activity_map"></activity>
-        <activity android:name=".Activities.SignupActivity"></activity>
+            android:label="@string/title_activity_map" />
+        <activity android:name=".Activities.SignupActivity" />
         <activity android:name=".Activities.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

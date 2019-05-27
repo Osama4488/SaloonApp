@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/item_expertCV"
+        android:layout_margin="5pt"
+        app:strokeColor="@color/colorBlack"
+        app:strokeWidth="1sp"
+        app:cardCornerRadius="2pt"
+        android:background="@color/colorLightGray"
+        android:layout_width="match_parent"
+        android:layout_height="60pt">
+
+        <RelativeLayout
+            android:paddingLeft="5pt"
+            android:paddingRight="10pt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/item_deleteIB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="5pt"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_back_arrow"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_toRightOf="@id/item_deleteIB"
+                android:layout_height="match_parent"
+                android:background="@color/colorBlack"/>
+
+            <RelativeLayout
+                android:id="@+id/textViewRL"
+                android:layout_marginLeft="5pt"
+                android:layout_toRightOf="@id/item_deleteIB"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/item_expertName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2pt"
+                    android:text="Sample"
+                    style="@style/LargeTVBlack"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/item_subServicePrice"
+                    android:layout_below="@id/item_expertName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2pt"
+                    android:text="Sample"
+                    style="@style/MediumTVBlack"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/item_expertExperience"
+                    android:layout_below="@id/item_subServicePrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Experience"
+                    style="@style/MediumTVBlack"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </android.support.design.card.MaterialCardView>
+
+</RelativeLayout>

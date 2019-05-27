@@ -18,7 +18,7 @@ import android.view.Menu;
 
 import com.example.saloonapp.Fragments.BookingsFragment;
 import com.example.saloonapp.Fragments.ExpertsFragment;
-import com.example.saloonapp.Fragments.ProfileFragment;
+import com.example.saloonapp.Fragments.ParlourProfileFragment;
 import com.example.saloonapp.Fragments.ServicesFragment;
 import com.example.saloonapp.R;
 
@@ -43,6 +43,12 @@ public class ParlourDrawerActivity extends AppCompatActivity implements Navigati
         bindControls();
         bindListeners();
         toolbarSetting();
+        setUpHomePage();
+
+    }
+
+    private void setUpHomePage() {
+        navigationView.setCheckedItem(R.id.nav_services);
         setUpFragment(new ServicesFragment(), "Services");
     }
 
@@ -135,7 +141,7 @@ public class ParlourDrawerActivity extends AppCompatActivity implements Navigati
             fragment = new ExpertsFragment();
             toolbarTitle = "Experts";
         } else if (id == R.id.nav_profile) {
-            fragment = new ProfileFragment();
+            fragment = new ParlourProfileFragment();
             toolbarTitle = "Profile";
         } else if (id == R.id.nav_services) {
             fragment = new ServicesFragment();

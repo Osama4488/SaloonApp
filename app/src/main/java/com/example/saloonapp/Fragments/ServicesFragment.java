@@ -84,16 +84,6 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
     public void onClick(View v) {
         if (v == addServiceFAB) {
             showAddServiceDialog();
@@ -188,5 +178,15 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
         dialog_serviceNameET = dialogView.findViewById(R.id.dialog_serviceNameET);
         dialog_closeIB = dialogView.findViewById(R.id.dialog_closeIB);
         dialog_addServiceBN = dialogView.findViewById(R.id.dialog_addServiceBN);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 }
