@@ -66,7 +66,7 @@ public class ParlourDetailActivity extends AppCompatActivity implements View.OnC
                 ));
             }
             parlourServicesModelList.add(new ParlourServicesModel(
-                    new ServicesModel(i, "Service " + i),
+                    new ServicesModel(String.valueOf(i), "Service " + i),
                     tempList
             ));
         }

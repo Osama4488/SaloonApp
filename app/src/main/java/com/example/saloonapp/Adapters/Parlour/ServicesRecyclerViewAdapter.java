@@ -1,8 +1,10 @@
 package com.example.saloonapp.Adapters.Parlour;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -16,6 +18,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +30,18 @@ import com.example.saloonapp.Activities.Parlour.SubServiceActivity;
 import com.example.saloonapp.Models.ServicesModel;
 import com.example.saloonapp.R;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRecyclerViewAdapter.ItemServiceViewHolder> implements View.OnClickListener {
 
@@ -44,6 +58,13 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
     private AppCompatEditText dialog_serviceNameET;
     private AppCompatImageButton dialog_closeIB;
     private int servicePosition;
+
+    //Api Strings
+    private String url;
+    private JSONObject jsonObject;
+    private MediaType JSON;
+    private OkHttpClient client;
+    private Request request;
 
     public ServicesRecyclerViewAdapter(Activity activity, List<ServicesModel> servicesModelList, RecyclerView serviceRV, AppCompatTextView titleTV) {
         this.activity = activity;
@@ -96,15 +117,57 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
         return servicesModelList.size();
     }
 
-    private void deleteServiceAtPosition(int position) {
-        servicesModelList.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, servicesModelList.size());
-        if (servicesModelList.size() == 0) {
-            controlsVisibility(View.VISIBLE);
-        } else {
-            controlsVisibility(View.GONE);
-        }
+    private void hitApiDeleteService(final int position) {
+        url = activity.getString(R.string.url) + "services/" + servicesModelList.get(position).getServiceId();
+
+        client = new OkHttpClient.Builder()
+                .build();
+
+        request = new Request.Builder()
+                .url( url )
+                .header("Authorization", "Bearer " + getToken())
+                .delete()
+                .build();
+        client.newCall( request ).enqueue( new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity,"Network Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+                Log.e("SERVER FAILURE", ""+e);
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                if (response.isSuccessful()){
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, servicesModelList.get(position).getServiceName() + " service removed", Toast.LENGTH_SHORT).show();
+                            servicesModelList.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, servicesModelList.size());
+                            if (servicesModelList.size() == 0) {
+                                controlsVisibility(View.VISIBLE);
+                            } else {
+                                controlsVisibility(View.GONE);
+                            }
+                        }
+                    });
+                } else {
+                    Log.e("ANOTHER STATUS CODE", "hitApiDeleteService: onResponse: " + response.code());
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        } );
     }
 
     private void controlsVisibility(int visibliltiy) {
@@ -117,14 +180,72 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
         }
     }
 
-    private void updateServiceAtPosition(int position) {
-        servicesModelList.set(position, new ServicesModel(
-                servicesModelList.get(position).getServiceId(),
-                dialog_serviceNameET.getText().toString()
-        ));
-        notifyItemChanged(position);
-        notifyItemRangeChanged(position, servicesModelList.size());
-        updateServiceDialog.dismiss();
+    private String getToken(){
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("access_token", null);
+    }
+
+    private void hitApiUpdateService(final int position) {
+        url = activity.getString(R.string.url) + "services/" + servicesModelList.get(position).getServiceId();
+
+        client = new OkHttpClient.Builder()
+                .build();
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("Id", servicesModelList.get(position).getServiceId());
+            jsonObject.put("Name", dialog_serviceNameET.getText().toString());
+        } catch (Exception e) {
+            Log.e("JSON EXCEPTION", "hitApiUpdateService: " + e);
+        }
+
+        JSON = MediaType.parse("application/json; charset=utf-8");
+
+        RequestBody body = RequestBody.create( JSON, jsonObject.toString());
+
+        request = new Request.Builder()
+                .url( url )
+                .header("Authorization", "Bearer " + getToken())
+                .put(body)
+                .build();
+        client.newCall( request ).enqueue( new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity,"Network Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+                Log.e("SERVER FAILURE", "hitApiUpdateService: "+e);
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                if (response.isSuccessful()){
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            servicesModelList.set(position, new ServicesModel(
+                                    servicesModelList.get(position).getServiceId(),
+                                    dialog_serviceNameET.getText().toString()
+                            ));
+                            notifyItemChanged(position);
+                            notifyItemRangeChanged(position, servicesModelList.size());
+                            updateServiceDialog.dismiss();
+                        }
+                    });
+                } else {
+                    Log.e("ANOTHER STATUS CODE", "hitApiUpdateService: onResponse: " + response.code());
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        } );
     }
 
     private void updateService(int servicePosition) {
@@ -134,10 +255,9 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
             dialog_serviceNameTIL.setError("Can not be empty");
             animateDialog(updateServiceDialog);
         } else if (!(dialog_serviceNameTIL.isErrorEnabled())) {
-            updateServiceAtPosition(servicePosition);
+            hitApiUpdateService(servicePosition);
         }
     }
-
 
     private void animateDialog(AlertDialog dialog) {
         dialog.getWindow()
@@ -222,8 +342,7 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
         alertDialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                deleteServiceAtPosition(position);
-                Toast.makeText(activity, serviceName + " Removed", Toast.LENGTH_SHORT).show();
+                hitApiDeleteService(position);
                 dialog.dismiss();
             }
         });

@@ -137,7 +137,6 @@ public class ParlourDrawerActivity extends AppCompatActivity implements Navigati
 
         String toolbarTitle = "";
 
-
         if (id == R.id.nav_bookings) {
             fragment = new BookingsFragment();
             toolbarTitle = "Bookings";

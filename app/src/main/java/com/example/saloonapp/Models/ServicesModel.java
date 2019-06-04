@@ -1,15 +1,15 @@
 package com.example.saloonapp.Models;
 
 public class ServicesModel {
-    private Integer serviceId;
+    private String serviceId;
     private String serviceName;
 
-    public ServicesModel(Integer serviceId, String serviceName) {
+    public ServicesModel(String serviceId, String serviceName) {
         this.serviceId = serviceId;
         this.serviceName = serviceName;
     }
 
-    public Integer getServiceId() {
+    public String getServiceId() {
         return serviceId;
     }
 
