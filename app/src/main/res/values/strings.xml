@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">SaloonApp</string>
     <string name="url">https://d17c43b8.ngrok.io/api/</string>
+    <string name="parlourToken">yOjD19uKpMX4eOl3kHldzgZmYEPYZIz5QLtoz86pbqbo_aP_3SYMG5Ynf1eLnI5wPPG1mC4x0bzV0nYhXswYGUZmXaQTDrGwbWddpxhg7yGeSyRjrXPEOYhDUa7V-FeHHxkEwKnXImnSIU8B0CoNLQozWdFHwfzUqWrglNDzq98faTUMqAxT4D3NJnL20ah4tbA7wpVUzHCh7d9_FtvDnYAhZs2PnJKIx2XXyvV0Ymg2RXxFHdAQWIIkUJbyVygunNz5CryzX_fKyXVJgfNLG5yyl-_uLym5TXLwN17vIxWWfjaZdnCO5n_D2A-xYy4e-fWoSaio0LArTI_c8iAlKHkDJJe0pB4ygvpUI9nW5oJiVqorrDfeZRrT7ipttbKqhObljvbwtPD4ca8h0aZiTD93-k2W9MNhkZaRVRn4KRrsCBI3SEb--sy0yoNAwj6hnAwlNXblJ-85SkkFDjENj-b4scW12kBji0_7lkfLva2KiQRsfkaVtRd7Gwa85qiHq55Cs8OuchyGWy8UAauA0Q</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
