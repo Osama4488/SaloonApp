@@ -1,7 +1,9 @@
 package com.example.saloonapp.Adapters.Parlour;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -15,6 +17,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +25,22 @@ import android.view.Window;
 import android.view.animation.CycleInterpolator;
 import android.widget.Toast;
 
+import com.example.saloonapp.Models.ServicesModel;
 import com.example.saloonapp.Models.SubServicesModel;
 import com.example.saloonapp.R;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class SubServicesRecyclerViewAdapter extends RecyclerView.Adapter<SubServicesRecyclerViewAdapter.ItemSubServiceViewHolder> implements View.OnClickListener {
 
@@ -42,8 +57,13 @@ public class SubServicesRecyclerViewAdapter extends RecyclerView.Adapter<SubServ
     private TextInputLayout dialog_subServiceNameTIL, dialog_subServicePriceTIL, dialog_subServiceDescriptionTIL;
     private AppCompatEditText dialog_subServiceNameET, dialog_subServicePriceET, dialog_subServiceDescriptionET;
     private AppCompatImageButton dialog_closeIB;
-
     private int subServicePosition;
+
+    //Api Strings
+    private String url, TAG = "SUB_SERVICE_RV_ADAPTER";
+    private MediaType JSON;
+    private OkHttpClient client;
+    private Request request;
 
     public SubServicesRecyclerViewAdapter(Activity activity, String title, List<SubServicesModel> subServicesModelList, RecyclerView subServicesRV, AppCompatTextView titleTV) {
         this.activity = activity;
@@ -90,15 +110,131 @@ public class SubServicesRecyclerViewAdapter extends RecyclerView.Adapter<SubServ
         return subServicesModelList.size();
     }
 
-    private void deleteSubServiceAtPosition(int position) {
-        subServicesModelList.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, subServicesModelList.size());
-        if (subServicesModelList.size() == 0) {
-            controlsVisibility(View.VISIBLE);
-        } else {
-            controlsVisibility(View.GONE);
+    private String getToken(){
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("access_token", null);
+    }
+
+    private void hitApiDeleteSubService(final int position) {
+        url = activity.getString(R.string.url) + "subservices/" + subServicesModelList.get(position).getSubServiceId();
+
+        client = new OkHttpClient.Builder()
+                .build();
+
+        request = new Request.Builder()
+                .url( url )
+                .header("Authorization", "Bearer " + getToken())
+                .delete()
+                .build();
+        client.newCall( request ).enqueue( new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity,"Network Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+                Log.e(TAG, "hitApiDeleteSubService: onFailure: " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                if (response.isSuccessful()){
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, subServicesModelList.get(position).getSubServiceName() + " removed", Toast.LENGTH_SHORT).show();
+                            subServicesModelList.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, subServicesModelList.size());
+                            if (subServicesModelList.size() == 0) {
+                                controlsVisibility(View.VISIBLE);
+                            } else {
+                                controlsVisibility(View.GONE);
+                            }
+                        }
+                    });
+                } else {
+                    Log.e(TAG, "hitApiDeleteSubService: onResponse: " + response.code());
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        } );
+    }
+
+    private void hitApiUpdateSubService(final int position) {
+        url = activity.getString(R.string.url) + "subservices/" + subServicesModelList.get(position).getSubServiceId();
+
+        client = new OkHttpClient.Builder()
+                .build();
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("Id", subServicesModelList.get(position).getSubServiceId());
+            jsonObject.put("Name", dialog_subServiceNameET.getText().toString());
+            jsonObject.put("Price", dialog_subServicePriceET.getText().toString());
+            jsonObject.put("Description", dialog_subServiceDescriptionET.getText().toString());
+            jsonObject.put("ServiceId", subServicesModelList.get(position).getServiceId());
+        } catch (Exception e) {
+            Log.e(TAG, "hitApiUpdateSubService: " + e);
         }
+
+        JSON = MediaType.parse("application/json; charset=utf-8");
+
+        RequestBody body = RequestBody.create( JSON, jsonObject.toString());
+
+        request = new Request.Builder()
+                .url( url )
+                .header("Authorization", "Bearer " + getToken())
+                .put(body)
+                .build();
+        client.newCall( request ).enqueue( new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity,"Network Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+                Log.e(TAG, "hitApiUpdateSubService: onFailure: " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                if (response.isSuccessful()){
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            subServicesModelList.set(position, new SubServicesModel(
+                                    subServicesModelList.get(position).getSubServiceId(),
+                                    dialog_subServiceNameET.getText().toString(),
+                                    dialog_subServiceDescriptionET.getText().toString(),
+                                    subServicesModelList.get(position).getServiceId(),
+                                    Integer.valueOf(dialog_subServicePriceET.getText().toString())
+                            ));
+                            notifyItemChanged(position);
+                            notifyItemRangeChanged(position, subServicesModelList.size());
+                            updateSubServiceDialog.dismiss();
+                        }
+                    });
+                } else {
+                    Log.e(TAG, "hitApiUpdateSubService: onResponse: " + response.code());
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        } );
     }
 
     private void controlsVisibility(int visibliltiy) {
@@ -110,18 +246,6 @@ public class SubServicesRecyclerViewAdapter extends RecyclerView.Adapter<SubServ
             titleTV.setVisibility(View.GONE);
             subServicesRV.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void updateSubServiceAtPosition(int position) {
-        subServicesModelList.set(position, new SubServicesModel(
-                subServicesModelList.get(position).getSubServiceId(),
-                dialog_subServiceNameET.getText().toString(),
-                dialog_subServiceDescriptionET.getText().toString(),
-                Integer.valueOf(dialog_subServicePriceET.getText().toString())
-        ));
-        notifyItemChanged(position);
-        notifyItemRangeChanged(position, subServicesModelList.size());
-        updateSubServiceDialog.dismiss();
     }
 
     private void updateSubService(int servicePosition) {
@@ -143,10 +267,9 @@ public class SubServicesRecyclerViewAdapter extends RecyclerView.Adapter<SubServ
             }
             animateDialog(updateSubServiceDialog);
         } else if (!(dialog_subServiceNameTIL.isErrorEnabled() && dialog_subServicePriceTIL.isErrorEnabled() && dialog_subServiceDescriptionTIL.isErrorEnabled())) {
-            updateSubServiceAtPosition(servicePosition);
+            hitApiUpdateSubService(servicePosition);
         }
     }
-
 
     private void animateDialog(AlertDialog dialog) {
         dialog.getWindow()
@@ -282,8 +405,7 @@ public class SubServicesRecyclerViewAdapter extends RecyclerView.Adapter<SubServ
         alertDialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                deleteSubServiceAtPosition(position);
-                Toast.makeText(activity, subServiceName + " Removed", Toast.LENGTH_SHORT).show();
+                hitApiDeleteSubService(position);
                 dialog.dismiss();
             }
         });

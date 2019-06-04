@@ -59,9 +59,10 @@ public class ParlourDetailActivity extends AppCompatActivity implements View.OnC
             List<SubServicesModel> tempList = new ArrayList<>();
             for (int j = 0; j <= i; j++) {
                 tempList.add(new SubServicesModel(
-                        j,
+                        String.valueOf(j),
                         "Sub Service " + j,
                         "Sub Service Description " + j,
+                        String.valueOf(j),
                         j * 100
                 ));
             }

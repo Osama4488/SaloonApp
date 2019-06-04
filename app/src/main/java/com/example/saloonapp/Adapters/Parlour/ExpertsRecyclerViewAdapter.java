@@ -26,6 +26,7 @@ import android.view.animation.CycleInterpolator;
 import android.widget.Toast;
 
 import com.example.saloonapp.Models.ExpertsModel;
+import com.example.saloonapp.Models.ServicesModel;
 import com.example.saloonapp.R;
 
 import org.json.JSONException;
@@ -52,9 +53,12 @@ public class ExpertsRecyclerViewAdapter extends RecyclerView.Adapter<ExpertsRecy
     private List<ExpertsModel> expertsModelList;
     public RecyclerView expertsRV;
     private AppCompatTextView titleTV;
-    private String strUrl,strToken,TAG = "Expert Adapter";
-    private SharedPreferences sharedPreferences;
 
+    //Api Strings
+    private String url, TAG = "EXPERT_RV_ADAPTER";
+    private MediaType JSON;
+    private OkHttpClient client;
+    private Request request;
 
     // Dialog Controls
     private AlertDialog updateExpertDialog;
@@ -109,52 +113,126 @@ public class ExpertsRecyclerViewAdapter extends RecyclerView.Adapter<ExpertsRecy
         return expertsModelList.size();
     }
 
-    private void deleteExpertAtPosition(int position) {
-
-        deleteExpert(expertsModelList.get( position ).getExpertId(),position);
-
+    private String getToken(){
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("access_token", null);
     }
 
-    public void deleteExpert(final String Id, final int position) {
-        strUrl = activity.getResources().getString( R.string.url ) + "experts/"+Id;
-        sharedPreferences = activity.getSharedPreferences("userDetails", MODE_PRIVATE);
-        strToken = sharedPreferences.getString( "access_token",null );
+    private void hitApiDeleteExpert(final int position) {
+        url = activity.getString(R.string.url) + "experts/" + expertsModelList.get(position).getExpertId();
 
-
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url( strUrl )
-                .delete()
-                .addHeader( "Authorization", "Bearer " + strToken )
+        client = new OkHttpClient.Builder()
                 .build();
 
+        request = new Request.Builder()
+                .url( url )
+                .header("Authorization", "Bearer " + getToken())
+                .delete()
+                .build();
         client.newCall( request ).enqueue( new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity,"Network Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+                Log.e(TAG, "hitApiDeleteExpert: " + e);
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-
-                if (response.isSuccessful()) {
-                    expertsModelList.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, expertsModelList.size());
-                    if (expertsModelList.size() == 0) {
-                        controlsVisibility(View.VISIBLE);
-                    } else {
-                        controlsVisibility(View.GONE);
-                    }
-
-                } else {
-                    activity.runOnUiThread( new Runnable() {
+                if (response.isSuccessful()){
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText( activity, "Network error, try again later", Toast.LENGTH_LONG ).show();
+                            Toast.makeText(activity, expertsModelList.get(position).getExpertName() + " expert removed", Toast.LENGTH_SHORT).show();
+                            expertsModelList.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, expertsModelList.size());
+                            if (expertsModelList.size() == 0) {
+                                controlsVisibility(View.VISIBLE);
+                            } else {
+                                controlsVisibility(View.GONE);
+                            }
                         }
-                    } );
-                    Log.e( TAG, "onResponse: " + response.code() );
+                    });
+                } else {
+                    Log.e(TAG, "hitApiDeleteExpert: onResponse: " + response.code());
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        } );
+    }
+
+    private void hitApiUpdateExpert(final int position) {
+        url = activity.getString(R.string.url) + "experts/" + expertsModelList.get(position).getExpertId();
+
+        client = new OkHttpClient.Builder()
+                .build();
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("Id", expertsModelList.get(position).getExpertId());
+            jsonObject.put( "Name", dialog_expertNameET.getText().toString() );
+            jsonObject.put( "Expertise", dialog_expertExpertiseET.getText().toString() );
+            jsonObject.put( "Experience", dialog_expertExperienceET.getText().toString() );
+        } catch (Exception e) {
+            Log.e(TAG, "hitApiUpdateExpert: " + e);
+        }
+
+        JSON = MediaType.parse("application/json; charset=utf-8");
+
+        RequestBody body = RequestBody.create( JSON, jsonObject.toString());
+
+        request = new Request.Builder()
+                .url( url )
+                .header("Authorization", "Bearer " + getToken())
+                .put(body)
+                .build();
+        client.newCall( request ).enqueue( new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity,"Network Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+                Log.e(TAG, "hitApiUpdateExpert: onFailure: " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                if (response.isSuccessful()){
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            expertsModelList.set(position, new ExpertsModel(
+                                    expertsModelList.get(position).getExpertId(),
+                                    dialog_expertNameET.getText().toString(),
+                                    dialog_expertExpertiseET.getText().toString(),
+                                    dialog_expertExperienceET.getText().toString()
+                            ));
+                            notifyItemChanged(position);
+                            notifyItemRangeChanged(position, expertsModelList.size());
+                            updateExpertDialog.dismiss();
+                        }
+                    });
+                } else {
+                    Log.e(TAG, "hitApiUpdateExpert: onResponse: " + response.code());
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             }
         } );
@@ -169,18 +247,6 @@ public class ExpertsRecyclerViewAdapter extends RecyclerView.Adapter<ExpertsRecy
             expertsRV.setVisibility(View.VISIBLE);
 
         }
-    }
-
-    private void updateExpertAtPosition(int position) {
-        expertsModelList.set(position, new ExpertsModel(
-                expertsModelList.get(position).getExpertId(),
-                dialog_expertNameET.getText().toString(),
-                dialog_expertExpertiseET.getText().toString(),
-                dialog_expertExperienceET.getText().toString()
-        ));
-        notifyItemChanged(position);
-        notifyItemRangeChanged(position, expertsModelList.size());
-        updateExpertDialog.dismiss();
     }
 
     private void updateExpert(int servicePosition) {
@@ -202,7 +268,7 @@ public class ExpertsRecyclerViewAdapter extends RecyclerView.Adapter<ExpertsRecy
             }
             animateDialog(updateExpertDialog);
         } else if (!(dialog_expertNameTIL.isErrorEnabled() && dialog_expertExpertiseTIL.isErrorEnabled() && dialog_expertExperienceTIL.isErrorEnabled())) {
-            updateExpertAtPosition(servicePosition);
+            hitApiUpdateExpert(servicePosition);
         }
     }
 
@@ -341,8 +407,7 @@ public class ExpertsRecyclerViewAdapter extends RecyclerView.Adapter<ExpertsRecy
         alertDialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                deleteExpertAtPosition(position);
-                Toast.makeText(activity, expertName + " Removed", Toast.LENGTH_SHORT).show();
+                hitApiDeleteExpert(position);
                 dialog.dismiss();
             }
         });

@@ -25,7 +25,6 @@ import android.view.Window;
 import android.view.animation.CycleInterpolator;
 import android.widget.Toast;
 
-import com.example.saloonapp.Adapters.Parlour.ExpertsRecyclerViewAdapter;
 import com.example.saloonapp.Adapters.Parlour.ServicesRecyclerViewAdapter;
 import com.example.saloonapp.Models.ServicesModel;
 import com.example.saloonapp.R;
@@ -36,7 +35,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -52,6 +50,7 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
     private List<ServicesModel> servicesModelList;
     public RecyclerView serviceRV;
     private AppCompatTextView titleTV;
+    private String TAG = "SERVICES_FRAGMENT";
 
     // Dialog Controls
     private AlertDialog addServiceDialog;
@@ -62,7 +61,6 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
 
     //Api Strings
     private String url;
-    private JSONObject jsonObject;
     private MediaType JSON;
     private OkHttpClient client;
     private Request request;
@@ -119,21 +117,22 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getActivity(),"Network Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),"Network Error", Toast.LENGTH_LONG).show();
                     }
                 });
-                Log.e("SERVER FAILURE", ""+e);
+                Log.e(TAG, "hitApiGetAllServices: " + e);
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 if (response.code() == 200){
-                    castDataToList(response);
+                    castServicesToList(response);
                 } else {
+                    Log.e(TAG, "hitApiGetAllServices: onResponse: " + response.code());
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getActivity(), "Network error, try again later.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Network error, try again later.", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -141,7 +140,7 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
         } );
     }
 
-    private void castDataToList(Response response) {
+    private void castServicesToList(Response response) {
         try {
             servicesModelList = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(response.body().string());
@@ -159,7 +158,13 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
                 }
             });
         } catch (Exception e) {
-
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(), "Network error, try again later.", Toast.LENGTH_LONG).show();
+                }
+            });
+            Log.e(TAG, "castservicesToList: " + e);
         }
     }
 
@@ -230,7 +235,7 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
         try {
             jsonObject.put("Name", serviceName);
         } catch (Exception e) {
-            Log.e("JSON EXCEPTION", "hitApiAddServices: " + e);
+            Log.e(TAG, "hitApiAddServices: " + e);
         }
 
         RequestBody body = RequestBody.create( JSON, jsonObject.toString() );
@@ -248,15 +253,15 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
                         Toast.makeText(getActivity(),"Network Error", Toast.LENGTH_LONG).show();
                     }
                 });
-                Log.e("SERVER FAILURE", ""+e);
+                Log.e(TAG, "hitApiAddServices: " + e);
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 if (response.isSuccessful()){
-                    addDataToList(response);
+                    addServiceToList(response);
                 } else {
-                    Log.e("ANOTHER STATUS CODE", "hitApiAddServices: onResponse: " + response.code());
+                    Log.e(TAG, "hitApiAddServices: onResponse: " + response.code());
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -268,7 +273,7 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
         } );
     }
 
-    private void addDataToList(Response response) {
+    private void addServiceToList(Response response) {
         try {
             JSONObject jsonObject = new JSONObject(response.body().string());
             servicesModelList.add(new ServicesModel(
@@ -289,7 +294,7 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(), "Network error, try again later.", Toast.LENGTH_LONG).show();
                 }
             });
-            Log.e("EXCEPTION", "addDataToList: " + e);
+            Log.e(TAG, "addServiceToList: " + e);
         }
     }
 

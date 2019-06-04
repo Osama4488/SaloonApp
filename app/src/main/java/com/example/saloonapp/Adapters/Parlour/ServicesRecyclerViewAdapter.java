@@ -60,8 +60,7 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
     private int servicePosition;
 
     //Api Strings
-    private String url;
-    private JSONObject jsonObject;
+    private String url, TAG = "SERVICE_RV_ADAPTER";
     private MediaType JSON;
     private OkHttpClient client;
     private Request request;
@@ -98,6 +97,7 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
                 public void onClick(View v) {
                     Intent intent = new Intent(activity, SubServiceActivity.class);
                     intent.putExtra("serviceName", item.getServiceName());
+                    intent.putExtra("serviceId", item.getServiceId());
                     activity.startActivity(intent);
                 }
             });
@@ -115,6 +115,21 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
     @Override
     public int getItemCount() {
         return servicesModelList.size();
+    }
+
+    private void controlsVisibility(int visibliltiy) {
+        if (View.VISIBLE == visibliltiy) {
+            titleTV.setVisibility(View.VISIBLE);
+            serviceRV.setVisibility(View.GONE);
+        } else {
+            titleTV.setVisibility(View.GONE);
+            serviceRV.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private String getToken(){
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("access_token", null);
     }
 
     private void hitApiDeleteService(final int position) {
@@ -137,7 +152,7 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
                         Toast.makeText(activity,"Network Error", Toast.LENGTH_LONG).show();
                     }
                 });
-                Log.e("SERVER FAILURE", ""+e);
+                Log.e(TAG, "hitApiDeleteService: " + e);
             }
 
             @Override
@@ -158,7 +173,7 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
                         }
                     });
                 } else {
-                    Log.e("ANOTHER STATUS CODE", "hitApiDeleteService: onResponse: " + response.code());
+                    Log.e(TAG, "hitApiDeleteService: onResponse: " + response.code());
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -168,21 +183,6 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
                 }
             }
         } );
-    }
-
-    private void controlsVisibility(int visibliltiy) {
-        if (View.VISIBLE == visibliltiy) {
-            titleTV.setVisibility(View.VISIBLE);
-            serviceRV.setVisibility(View.GONE);
-        } else {
-            titleTV.setVisibility(View.GONE);
-            serviceRV.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private String getToken(){
-        SharedPreferences sharedPreferences = activity.getSharedPreferences("userDetails", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("access_token", null);
     }
 
     private void hitApiUpdateService(final int position) {
@@ -196,7 +196,7 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
             jsonObject.put("Id", servicesModelList.get(position).getServiceId());
             jsonObject.put("Name", dialog_serviceNameET.getText().toString());
         } catch (Exception e) {
-            Log.e("JSON EXCEPTION", "hitApiUpdateService: " + e);
+            Log.e(TAG, "hitApiUpdateService: " + e);
         }
 
         JSON = MediaType.parse("application/json; charset=utf-8");
@@ -217,7 +217,7 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
                         Toast.makeText(activity,"Network Error", Toast.LENGTH_LONG).show();
                     }
                 });
-                Log.e("SERVER FAILURE", "hitApiUpdateService: "+e);
+                Log.e(TAG, "hitApiUpdateService: onFailure: " + e);
             }
 
             @Override
@@ -236,7 +236,7 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
                         }
                     });
                 } else {
-                    Log.e("ANOTHER STATUS CODE", "hitApiUpdateService: onResponse: " + response.code());
+                    Log.e(TAG, "hitApiUpdateService: onResponse: " + response.code());
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

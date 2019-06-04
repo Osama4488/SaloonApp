@@ -30,16 +30,11 @@ import com.example.saloonapp.Models.ExpertsModel;
 import com.example.saloonapp.R;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.security.auth.login.LoginException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -49,16 +44,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class ExpertsFragment extends Fragment implements View.OnClickListener {
 
     public FloatingActionButton addExpertFAB;
     private List<ExpertsModel> expertsModelList;
     public RecyclerView expertsRV;
     private AppCompatTextView titleTV;
-    private String strUrl,strServerResponse,strToken,TAG = "Experts";
-    private SharedPreferences sharedPreferences;
+    private String TAG = "EXPERTS_FRAGMENT";
 
     // Dialog Controls
     private AlertDialog addexpertDialog;
@@ -66,6 +58,12 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
     private TextInputLayout dialog_expertNameTIL, dialog_expertExpertiseTIL, dialog_expertExperienceTIL;
     private AppCompatEditText dialog_expertNameET, dialog_expertExpertiseET, dialog_expertExperienceET;
     private AppCompatImageButton dialog_closeIB;
+
+    //Api Strings
+    private String url;
+    private MediaType JSON;
+    private OkHttpClient client;
+    private Request request;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,11 +76,7 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
 
         bindControls(view);
         bindListeners();
-       // dummyList();
-
-        sharedPreferences = getActivity().getSharedPreferences("userDetails", MODE_PRIVATE);
-        strToken = sharedPreferences.getString( "access_token",null );
-        getExperts();
+        hitApiGetAllExperts();
 
         return view;
     }
@@ -117,78 +111,81 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void getExperts(){
-        strUrl = getResources().getString( R.string.url )+"experts";
+    private String getToken(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("access_token", null);
+    }
 
+    public void hitApiGetAllExperts(){
+        url = getString(R.string.url) + "experts";
 
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(strUrl)
-                .addHeader( "Authorization","Bearer "+strToken )
+        client = new OkHttpClient.Builder()
                 .build();
 
+        request = new Request.Builder()
+                .url(url)
+                .addHeader( "Authorization","Bearer " + getToken() )
+                .build();
 
         client.newCall( request ).enqueue( new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(),"Network Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+                Log.e(TAG, "hitApiGetAllExperts: " + e);
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
 
                 if (response.isSuccessful()) {
-                    strServerResponse = response.body().string();
-                    //Log.e( TAG, "onResponse: "+strServerResponse );
-
-                    castExperts(strServerResponse);
-
+                    castExpertsToList(response);
                 }else{
+                    Log.e( TAG, "hitApiGetAllExperts: onResponse: " + response.code());
                     getActivity().runOnUiThread( new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText( getActivity(),"Network error, try again later",Toast.LENGTH_LONG).show();
+                            Toast.makeText( getActivity(),"Network error, try again later.",Toast.LENGTH_LONG).show();
                         }
                     } );
-                    Log.e( TAG, "onResponse: "+strServerResponse );
                 }
             }
         } );
 
     }
 
-    private void castExperts(String strServerResponse) {
-
-        expertsModelList = new ArrayList <>();
-
+    private void castExpertsToList(Response response) {
         try {
-            JSONArray jsonArray = new JSONArray( strServerResponse );
+            expertsModelList = new ArrayList <>();
+            JSONArray jsonArray = new JSONArray(response.body().string());
             for (int i = 0; i < jsonArray.length(); i++) {
-
                 expertsModelList.add( new ExpertsModel(
                         jsonArray.getJSONObject( i ).getString( "Id" ),
                         jsonArray.getJSONObject( i ).getString( "Name" ),
                         jsonArray.getJSONObject( i ).getString( "Expertise" ),
                         jsonArray.getJSONObject( i ).getString( "Experience" )
                 ) );
-
             }
-
             getActivity().runOnUiThread( new Runnable() {
                 @Override
                 public void run() {
                     setUpList();
                 }
             } );
-
-
-            Log.e( TAG, "castExperts: " + jsonArray );
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(), "Network error, try again later.", Toast.LENGTH_LONG).show();
+                }
+            });
+            Log.e(TAG, "castExpertsToList: " + e);
         }
-
     }
-
 
     private void controlsVisibility(int visibliltiy) {
         if (View.VISIBLE == visibliltiy) {
@@ -213,11 +210,11 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
         } else if (v == dialog_closeIB) {
             addexpertDialog.dismiss();
         } else if (v == dialog_addExpertBN) {
-            addService();
+            addExpert();
         }
     }
 
-    private void addService() {
+    private void addExpert() {
         String expertName = dialog_expertNameET.getText().toString();
         String expertExpertise = dialog_expertExpertiseET.getText().toString();
         String expertExperience = dialog_expertExperienceET.getText().toString();
@@ -236,26 +233,32 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
             }
             animateDialog(addexpertDialog);
         } else if (!(dialog_expertNameTIL.isErrorEnabled() && dialog_expertExpertiseTIL.isErrorEnabled() && dialog_expertExperienceTIL.isErrorEnabled())) {
-
-            addExperts(expertName,expertExpertise,expertExperience);
+            hitApiAddExpert(expertName, expertExpertise, expertExperience);
         }
     }
 
-    public void addExperts(final String Name, final String Expertise, final String Experience) {
-        strUrl = getResources().getString( R.string.url ) + "experts";
+    public void hitApiAddExpert(final String Name, final String Expertise, final String Experience) {
+        url = getResources().getString( R.string.url ) + "experts";
 
-        MediaType JSON = MediaType.parse( "application/json; charset=utf-8" );
-        Map <String, String> params = new HashMap <String, String>();
-        params.put( "Name", Name );
-        params.put( "Expertise", Expertise );
-        params.put( "Experience", Experience );
-        JSONObject parameter = new JSONObject( params );
-        OkHttpClient client = new OkHttpClient();
-        RequestBody body = RequestBody.create( JSON, parameter.toString() );
-        Request request = new Request.Builder()
-                .url( strUrl )
+        client = new OkHttpClient.Builder()
+                .build();
+
+        JSON = MediaType.parse( "application/json; charset=utf-8" );
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put( "Name", Name );
+            jsonObject.put( "Expertise", Expertise );
+            jsonObject.put( "Experience", Experience );
+        } catch (Exception e) {
+            Log.e(TAG, "hitApiAddExpert: " + e);
+        }
+
+        RequestBody body = RequestBody.create( JSON, jsonObject.toString() );
+        request = new Request.Builder()
+                .url( url )
                 .post( body )
-                .addHeader( "Authorization", "Bearer " + strToken )
+                .addHeader( "Authorization", "Bearer " + getToken())
                 .build();
 
         client.newCall( request ).enqueue( new Callback() {
@@ -266,42 +269,46 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-
                 if (response.isSuccessful()) {
-                    strServerResponse = response.body().string();
-                    Log.e( TAG, "onResponse: " + strServerResponse );
-
-                    try {
-                        JSONObject object = new JSONObject( strServerResponse );
-
-                        expertsModelList.add( new ExpertsModel(
-                                object.getString( "Id" ),
-                                object.getString( "Name" ),
-                                object.getString( "Expertise" ),
-                                object.getString( "Experience" )
-                        ) );
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    getActivity().runOnUiThread( new Runnable() {
-                        @Override
-                        public void run() {
-                            setUpList();
-                            addexpertDialog.dismiss();
-                        }
-                    } );
+                    addExpertToList(response);
                 } else {
+                    Log.e( TAG, "hitApiAddExpert: onResponse: " + response.code() );
                     getActivity().runOnUiThread( new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText( getActivity(), "Network error, try again later", Toast.LENGTH_LONG ).show();
+                            Toast.makeText( getActivity(), "Network error, try again later.", Toast.LENGTH_LONG ).show();
                         }
                     } );
-                    Log.e( TAG, "onResponse: " + strServerResponse );
                 }
             }
         } );
+    }
+
+    private void addExpertToList(Response response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response.body().string());
+            expertsModelList.add(new ExpertsModel(
+                    jsonObject.getString( "Id" ),
+                    jsonObject.getString( "Name" ),
+                    jsonObject.getString( "Expertise" ),
+                    jsonObject.getString( "Experience" )
+            ));
+            getActivity().runOnUiThread( new Runnable() {
+                @Override
+                public void run() {
+                    setUpList();
+                    addexpertDialog.dismiss();
+                }
+            } );
+        } catch (Exception e) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(), "Network error, try again later.", Toast.LENGTH_LONG).show();
+                }
+            });
+            Log.e(TAG, "addExpertToList: " + e);
+        }
     }
 
     private void animateDialog(AlertDialog dialog) {

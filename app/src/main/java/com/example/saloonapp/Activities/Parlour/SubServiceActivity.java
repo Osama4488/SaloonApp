@@ -1,5 +1,7 @@
 package com.example.saloonapp.Activities.Parlour;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,18 +18,33 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.CycleInterpolator;
+import android.widget.Toast;
 
 import com.example.saloonapp.Adapters.Parlour.SubServicesRecyclerViewAdapter;
+import com.example.saloonapp.Models.ServicesModel;
 import com.example.saloonapp.Models.SubServicesModel;
 import com.example.saloonapp.R;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class SubServiceActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -47,7 +64,13 @@ public class SubServiceActivity extends AppCompatActivity implements View.OnClic
     private AppCompatEditText dialog_subServiceNameET, dialog_subServicePriceET, dialog_subServiceDescriptionET;
     private AppCompatImageButton dialog_closeIB;
 
-    private String title;
+    private String title, serviceId, TAG = "SUB_SERVICE_ACTIVITY";
+
+    //Api Strings
+    private String url;
+    private MediaType JSON;
+    private OkHttpClient client;
+    private Request request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +81,12 @@ public class SubServiceActivity extends AppCompatActivity implements View.OnClic
         bindControls();
         bindListeners();
         toolbarSetting();
-        dummyList();
+        hitApiGetAllSubServices();
     }
 
     private void getValuesOnStart() {
         title = getIntent().getExtras().getString("serviceName" , "not found");
+        serviceId = getIntent().getExtras().getString("serviceId" , null);
     }
 
     private void bindControls() {
@@ -79,17 +103,92 @@ public class SubServiceActivity extends AppCompatActivity implements View.OnClic
         addSubServiceFAB.setOnClickListener(this);
     }
 
-    private void dummyList() {
-        subServicesModelList = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            subServicesModelList.add(new SubServicesModel(
-                    i,
-                    "Sub Service " + i,
-                    "Description " + i,
-                    i * 100
-            ));
+//    private void dummyList() {
+//        subServicesModelList = new ArrayList<>();
+//        for (int i = 0; i < 2; i++) {
+//            subServicesModelList.add(new SubServicesModel(
+//                    i,
+//                    "Sub Service " + i,
+//                    "Description " + i,
+//                    i * 100
+//            ));
+//        }
+//        setUpList();
+//    }
+
+    private String getToken(){
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("access_token", null);
+    }
+
+    private void hitApiGetAllSubServices(){
+        url = getString( R.string.url )+ "subservices?serviceid=" + serviceId;
+
+        client = new OkHttpClient.Builder()
+                .build();
+
+        request = new Request.Builder()
+                .url(url)
+                .header( "Authorization","Bearer " + getToken() )
+                .build();
+
+        client.newCall( request ).enqueue( new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(SubServiceActivity.this, "Network Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+                Log.e(TAG, "hitApiGetAllSubServices: onFailure: " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    castSubServicesToList(response);
+                }else{
+                    Log.e( TAG, "hitApiGetAllSubServices: onResponse: " + response.code());
+                    runOnUiThread( new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText( SubServiceActivity.this, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                        }
+                    } );
+                }
+            }
+        } );
+    }
+
+    private void castSubServicesToList(Response response) {
+        try {
+            subServicesModelList = new ArrayList<>();
+            JSONArray jsonArray = new JSONArray(response.body().string());
+            for (int i = 0; i < jsonArray.length(); i++) {
+                subServicesModelList.add(new SubServicesModel(
+                        jsonArray.getJSONObject(i).getString("Id"),
+                        jsonArray.getJSONObject(i).getString("Name"),
+                        jsonArray.getJSONObject(i).getString("Description"),
+                        jsonArray.getJSONObject(i).getString("ServiceId"),
+                        jsonArray.getJSONObject(i).getInt("Price")
+                ));
+            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setUpList();
+                }
+            });
+        } catch (Exception e) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(SubServiceActivity.this, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                }
+            });
+            Log.e(TAG, "castSubServicesToList: " + e);
         }
-        setUpList();
     }
 
     private void setUpList() {
@@ -169,14 +268,88 @@ public class SubServiceActivity extends AppCompatActivity implements View.OnClic
             }
             animateDialog(addSubServiceDialog);
         } else if (!(dialog_subServiceNameTIL.isErrorEnabled() && dialog_subServicePriceTIL.isErrorEnabled() && dialog_subServiceDescriptionTIL.isErrorEnabled())) {
+            hitApiAddSubServices(subServiceName, subServiceDescription, subServicePrice);
+        }
+    }
+
+    private void hitApiAddSubServices(String subServiceName, String subServiceDescription, String subServicePrice) {
+        url = getString(R.string.url) + "subservices";
+
+        JSON = MediaType.parse("application/json; charset=utf-8");
+
+        client = new OkHttpClient.Builder()
+                .build();
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("Name", subServiceName);
+            jsonObject.put("Price", subServicePrice);
+            jsonObject.put("Description", subServiceDescription);
+            jsonObject.put("ServiceId", serviceId);
+        } catch (Exception e) {
+            Log.e(TAG, "hitApiAddSubServices: " + e);
+        }
+
+        RequestBody body = RequestBody.create( JSON, jsonObject.toString() );
+        request = new Request.Builder()
+                .url( url )
+                .header("Authorization", "Bearer " + getToken())
+                .post(body)
+                .build();
+        client.newCall( request ).enqueue( new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(SubServiceActivity.this, "Network Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+                Log.e(TAG, "hitApiAddSubServices: onFailure: " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                if (response.isSuccessful()){
+                    addSubServiceToList(response);
+                } else {
+                    Log.e(TAG, "hitApiAddSubServices: onResponse: " + response.code());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(SubServiceActivity.this, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        } );
+    }
+
+    private void addSubServiceToList(Response response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response.body().string());
             subServicesModelList.add(new SubServicesModel(
-                    (int) Math.random(),
-                    subServiceName,
-                    subServiceDescription,
-                    Integer.valueOf(subServicePrice)
+                    jsonObject.getString("Id"),
+                    jsonObject.getString("Name"),
+                    jsonObject.getString("Description"),
+                    jsonObject.getString("ServiceId"),
+                    jsonObject.getInt("Price")
             ));
-            setUpList();
-            addSubServiceDialog.dismiss();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setUpList();
+                    addSubServiceDialog.dismiss();
+                }
+            });
+        } catch (Exception e) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(SubServiceActivity.this, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                }
+            });
+            Log.e(TAG, "addSubServiceToList: " + e);
         }
     }
 
