@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
+    android:padding="5pt">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_parlourNameTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/LargeTVPrimary"
+        android:layout_marginBottom="5pt"
+        android:text="Parlour Name"
+        android:textStyle="bold"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorBlack"
+        android:layout_below="@id/item_parlourNameTV"/>
+
+</RelativeLayout>

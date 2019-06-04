@@ -21,6 +21,15 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="BookButtonStyle" parent="Base.Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:background">@drawable/round_button_book</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="SmallTVPrimary" parent="TextAppearance.AppCompat.Small">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
@@ -36,6 +45,11 @@
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
     </style>
 
+    <style name="SmallTVBlack" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+    </style>
+
     <style name="MediumTVBlack" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
@@ -45,5 +59,9 @@
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

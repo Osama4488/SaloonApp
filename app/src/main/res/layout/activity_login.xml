@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.LoginActivity"
+    tools:context=".Activities.Common.LoginActivity"
     android:background="@color/colorWhite"
     android:focusable="true">
 
@@ -91,6 +91,24 @@
             style="@style/LoginSignupButtonStyle"/>
 
     </RelativeLayout>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/userDrawer"
+        android:layout_above="@id/login_signupTV"
+        android:layout_margin="10pt"
+        android:text="User Drawer"
+        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/parlourDrawer"
+        android:layout_above="@id/login_signupTV"
+        android:layout_margin="10pt"
+        android:text="Parlour Drawer"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/login_signupTV"

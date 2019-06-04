@@ -1,4 +1,4 @@
-package com.example.saloonapp.Activities;
+package com.example.saloonapp.Activities.Parlour;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -23,11 +23,10 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.saloonapp.Adapters.PlaceAutocompleteAdapter;
+import com.example.saloonapp.Adapters.Common.PlaceAutocompleteAdapter;
 import com.example.saloonapp.Models.PlaceInfo;
 import com.example.saloonapp.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -63,7 +62,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
-    private static final int PLACE_PICKER_REQUEST = 1;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(-40, -168), new LatLng(71, 136));
 
@@ -77,7 +75,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
     private AutoCompleteTextView searchATV;
     private AppCompatImageView backIV;
-    private RelativeLayout backAndSearchRL;
     private AppCompatButton okBN;
     private FloatingActionButton currentLocationFAB;
 
@@ -94,14 +91,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
     @SuppressLint("RestrictedApi")
     private void bindControls() {
-        backAndSearchRL = findViewById(R.id.map_backAndSearchRL);
         searchATV = findViewById(R.id.map_searchATV);
         currentLocationFAB = findViewById(R.id.map_currentLocationFAB);
         okBN = findViewById(R.id.map_okBN);
         backIV = findViewById(R.id.map_bacKIV);
 
         currentLocationFAB.setVisibility(View.INVISIBLE);
-        backAndSearchRL.bringToFront();
     }
 
     private void getLocationPermission() {
@@ -164,16 +159,20 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
                 }
 
+                @SuppressLint("RestrictedApi")
                 @Override
                 public void onMarkerDragEnd(Marker marker) {
                     setMarkerAndMoveCamera(marker.getPosition(), null);
+                    currentLocationFAB.setVisibility(View.VISIBLE);
                 }
             });
 
             mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @SuppressLint("RestrictedApi")
                 @Override
                 public void onMapClick(LatLng latLng) {
                     setMarkerAndMoveCamera(latLng, null);
+                    currentLocationFAB.setVisibility(View.VISIBLE);
                 }
             });
         }
@@ -286,6 +285,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     };
 
     private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
+        @SuppressLint("RestrictedApi")
         @Override
         public void onResult(@NonNull PlaceBuffer places) {
             if(!places.getStatus().isSuccess()){
@@ -319,6 +319,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             }
             setMarkerAndMoveCamera(new LatLng(place.getViewport().getCenter().latitude,
                     place.getViewport().getCenter().longitude), mPlace);
+            currentLocationFAB.setVisibility(View.VISIBLE);
 
             places.release();
         }

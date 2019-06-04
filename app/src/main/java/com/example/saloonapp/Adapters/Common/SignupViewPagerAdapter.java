@@ -1,4 +1,4 @@
-package com.example.saloonapp.Adapters;
+package com.example.saloonapp.Adapters.Common;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

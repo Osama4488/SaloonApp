@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.User.ParlourInfoFragment">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/parlour_info_frag_parlourNameTV"
+        android:layout_marginTop="5pt"
+        android:layout_marginLeft="5pt"
+        android:text="Parlour Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/LargeTVPrimary"
+        android:textStyle="bold"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/parlour_info_frag_parlourNumberTV"
+        android:layout_below="@id/parlour_info_frag_parlourNameTV"
+        android:layout_marginTop="3pt"
+        android:layout_marginLeft="5pt"
+        android:text="Parlour Number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/MediumTVBlack"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/parlour_info_frag_parlourEmailTV"
+        android:layout_below="@id/parlour_info_frag_parlourNumberTV"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="3pt"
+        android:text="Parlour Email"
+        android:textStyle="italic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/MediumTVBlack"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/parlour_info_frag_parlourBookingsTV"
+        android:layout_below="@id/parlour_info_frag_parlourEmailTV"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="3pt"
+        android:text="Parlour Total Booking Completed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/MediumTVBlack"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/parlour_info_frag_parlourRatingTV"
+        android:layout_below="@id/parlour_info_frag_parlourBookingsTV"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="3pt"
+        android:text="Parlour Rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/MediumTVPrimary"/>
+
+    <android.support.v7.widget.AppCompatRatingBar
+        android:id="@+id/parlour_info_frag_parlourRB"
+        android:layout_below="@id/parlour_info_frag_parlourRatingTV"
+        android:layout_margin="5pt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="0.25"/>
+
+</RelativeLayout>

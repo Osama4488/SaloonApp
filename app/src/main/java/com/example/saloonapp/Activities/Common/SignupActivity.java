@@ -1,4 +1,4 @@
-package com.example.saloonapp.Activities;
+package com.example.saloonapp.Activities.Common;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -6,11 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
-import android.widget.ImageView;
 
-import com.example.saloonapp.Adapters.SignupViewPagerAdapter;
-import com.example.saloonapp.Fragments.ParlourSignupFragment;
-import com.example.saloonapp.Fragments.UserSignupFragment;
+import com.example.saloonapp.Adapters.Common.SignupViewPagerAdapter;
+import com.example.saloonapp.Fragments.Parlour.ParlourSignupFragment;
+import com.example.saloonapp.Fragments.User.UserSignupFragment;
 import com.example.saloonapp.R;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {

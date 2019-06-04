@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="3pt">
+
+    <CheckBox
+        android:id="@+id/parlour_schedule_dayCB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Day"
+        android:layout_marginBottom="2pt"
+        style="@style/LargeTVPrimary"
+        android:textStyle="bold"
+        android:textAllCaps="true"/>
+
+    <LinearLayout
+        android:id="@+id/spinnerLL"
+        android:layout_below="@id/parlour_schedule_dayCB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2pt"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/parlour_schedule_fromTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2pt"
+                android:text="From"
+                style="@style/SmallTVPrimary"/>
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/parlour_schedule_fromSP"
+                android:layout_below="@id/parlour_schedule_fromTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                style="@style/SmallTVBlack" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/parlour_schedule_fromFormatTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2pt"
+                android:text="AM/PM"
+                style="@style/SmallTVPrimary"/>
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/parlour_schedule_fromFormatSP"
+                android:layout_below="@id/parlour_schedule_fromFormatTV"
+                style="@style/SmallTVBlack"
+                android:gravity="right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/spinner2LL"
+        android:layout_below="@id/spinnerLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/parlour_schedule_toTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2pt"
+                android:text="TO"
+                style="@style/SmallTVPrimary"/>
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/parlour_schedule_toSP"
+                android:layout_below="@id/parlour_schedule_toTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                style="@style/SmallTVBlack" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/parlour_schedule_toFormatTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2pt"
+                android:layout_centerHorizontal="true"
+                android:text="AM/PM"
+                style="@style/SmallTVPrimary"/>
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/parlour_schedule_toFormatSP"
+                android:layout_below="@id/parlour_schedule_toFormatTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                style="@style/SmallTVBlack" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="5pt"
+        android:layout_below="@id/spinner2LL"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorBlack"/>
+
+
+
+</RelativeLayout>

@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.saloonapp">
 
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -15,27 +14,38 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activities.Parlour.ParlourScheduleActivity">
+
+        </activity>
+        <activity android:name=".Activities.User.FiltersActivity" />
+        <activity android:name=".Activities.User.ParlourDetailActivity" />
+        <activity android:name=".Activities.User.ListOfParloursActivity" />
+        <activity
+            android:name=".Activities.User.UserDrawerActivity"
+            android:label="@string/title_activity_user_drawer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.Parlour.SubServiceActivity" />
+        <activity
+            android:name=".Activities.Parlour.ParlourDrawerActivity"
+            android:label="@string/title_activity_parlour_drawer"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".Activities.MapActivity"
-            android:label="@string/title_activity_map">
-
-        </activity>
-        <activity android:name=".Activities.SignupActivity">
-
-        </activity>
-        <activity android:name=".Activities.LoginActivity">
+            android:name=".Activities.Parlour.MapActivity"
+            android:label="@string/title_activity_map" />
+        <activity android:name=".Activities.Common.SignupActivity" />
+        <activity android:name=".Activities.Common.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.MainActivity"></activity>
     </application>
 
 </manifest>

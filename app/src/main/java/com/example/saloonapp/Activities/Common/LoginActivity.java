@@ -1,4 +1,4 @@
-package com.example.saloonapp.Activities;
+package com.example.saloonapp.Activities.Common;
 
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +17,20 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.example.saloonapp.Activities.Parlour.ParlourDrawerActivity;
+import com.example.saloonapp.Activities.User.UserDrawerActivity;
 import com.example.saloonapp.R;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -24,7 +38,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private AppCompatEditText emailET, passET;
     private RadioButton userRB, parlourRB;
     private AppCompatButton loginBN;
-    private AppCompatTextView dontHaveAnAccountTV;
+    private AppCompatTextView dontHaveAnAccountTV, userDrawer, parlourDrawer;
+
+    //API strings
+    private String url;
+    private MediaType JSON;
+    private OkHttpClient client;
+    private Request request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +53,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         bindControls();
         bindListeners();
-        setEditttexError();
+        setEditTextError();
         disableCopyPaste();
     }
 
@@ -51,6 +71,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginBN = findViewById(R.id.login_loginBN);
 
         dontHaveAnAccountTV = findViewById(R.id.login_signupTV);
+        userDrawer = findViewById(R.id.userDrawer);
+        parlourDrawer = findViewById(R.id.parlourDrawer);
     }
 
     private void bindListeners() {
@@ -58,9 +80,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         userRB.setOnClickListener(this);
         parlourRB.setOnClickListener(this);
         dontHaveAnAccountTV.setOnClickListener(this);
+        userDrawer.setOnClickListener(this);
+        parlourDrawer.setOnClickListener(this);
     }
 
-    private void setEditttexError() {
+    private void setEditTextError() {
         emailET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -123,6 +147,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             onRadioButtonClicked(userRB);
         } else if (v == parlourRB) {
             onRadioButtonClicked(parlourRB);
+        } else if (v == userDrawer) {
+            startActivity(new Intent(getApplicationContext(), UserDrawerActivity.class));
+        } else if (v == parlourDrawer) {
+            startActivity(new Intent(getApplicationContext(), ParlourDrawerActivity.class));
         }
     }
 
@@ -137,8 +165,57 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 enableEdittextError(passTIL, "Field can not be empty");
             }
         } else if (!(emailTIL.isErrorEnabled() || passTIL.isErrorEnabled())){
-            // api ka kaam yaha karna hai
+            hitApiLogin(email, pass);
         }
+    }
+
+    private void hitApiLogin(String email, String pass) {
+        url = getString(R.string.url) + "token";
+
+        JSON = MediaType.parse( "application/x-www-form-urlencoded; charset=utf-8" );
+
+        String urlURI = "username=" + email + "&Password=" + pass + "&grant_type=password";
+
+        client = new OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                .build();
+        RequestBody body = RequestBody.create( JSON, urlURI );
+        request = new Request.Builder()
+                .url( url )
+                .post( body )
+                .build();
+        client.newCall( request ).enqueue( new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread( new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText( getApplicationContext(), "Network error", Toast.LENGTH_LONG ).show();
+                    }
+                } );
+                Log.e("SERVER FAILURE", "hitApiLogin: " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) {
+                if (response.code() == 200) {
+                    try {
+                        saveUserData(response.body().string());
+                    } catch (IOException e) {
+                        Log.e("RESPONSE EXCEPTION", "hitApiLogin: onResponse: " + e );
+                    }
+                } else {
+                    Toast.makeText(LoginActivity.this, "Network error, try again later.", Toast.LENGTH_SHORT).show();
+                    Log.e("ANOTHER STATUS CODE", "hitApiLogin: " + response.code() );
+                }
+            }
+        } );
+    }
+
+    private void saveUserData(String string) {
+        //save data in shared preference
     }
 
     private boolean checkIsNullOrEmpty(String value) {

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.User.ParlourDetailActivity">
+
+
+    
+    <RelativeLayout
+        android:id="@+id/headerRL"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/gradient">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/parlour_detail_backIV"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="5pt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back_arrow"
+            android:backgroundTint="@color/colorBlack"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/parlour_detail_parlourNameTV"
+            android:layout_centerInParent="true"
+            style="@style/LargeTVBlack"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:text="Parlour Name"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/parlour_detail_TL"
+        android:layout_below="@id/headerRL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        app:tabTextColor="@color/colorWhite"
+        app:tabIndicatorColor="@color/colorBlack"
+        android:background="@color/colorPrimary"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/parlour_detail_VP"
+        android:layout_below="@id/parlour_detail_TL"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

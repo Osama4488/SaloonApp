@@ -1,9 +1,8 @@
-package com.example.saloonapp.Fragments;
+package com.example.saloonapp.Fragments.Parlour;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -19,7 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.saloonapp.Activities.MapActivity;
+import com.example.saloonapp.Activities.Parlour.MapActivity;
+import com.example.saloonapp.Activities.Parlour.ParlourScheduleActivity;
 import com.example.saloonapp.R;
 
 public class ParlourSignupFragment extends Fragment implements View.OnClickListener {
@@ -325,7 +325,14 @@ public class ParlourSignupFragment extends Fragment implements View.OnClickListe
                 enableEdittextError(confirmPassTIL, "Passwords do not match");
             }
         } else if (!(nameTIL.isErrorEnabled() && emailTIL.isErrorEnabled() && contactTIL.isErrorEnabled() && locationTIL.isErrorEnabled() && passTIL.isErrorEnabled() && confirmPassTIL.isErrorEnabled())) {
-            // yaha karna hai api ka kaam
+            Intent intent = new Intent(getActivity(), ParlourScheduleActivity.class);
+            intent.putExtra("name", name);
+            intent.putExtra("email", email);
+            intent.putExtra("contact", contact);
+            intent.putExtra("location", location);
+            intent.putExtra("pass", pass);
+            intent.putExtra("confirmPass", confirmPass);
+            getActivity().startActivity(intent);
         }
     }
 
@@ -355,6 +362,8 @@ public class ParlourSignupFragment extends Fragment implements View.OnClickListe
         Log.e("VALUES", "onResume: " + lat.toString() + ", " + lng.toString() );
         if (lat != 0 && lng != 0) {
             locationET.setText(lat.toString() + ", " + lng.toString());
+            SharedPreferences.Editor editor = getActivity().getSharedPreferences("MapLatLng", Context.MODE_PRIVATE).edit();
+            editor.clear().apply();
         }
         super.onResume();
     }
