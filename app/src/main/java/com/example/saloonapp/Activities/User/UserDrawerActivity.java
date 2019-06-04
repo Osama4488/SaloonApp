@@ -1,6 +1,7 @@
 package com.example.saloonapp.Activities.User;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.example.saloonapp.Activities.Common.LoginActivity;
 import com.example.saloonapp.Adapters.User.SearchAutoCompleteAdapter;
 import com.example.saloonapp.Fragments.User.UserAppointmentFragment;
 import com.example.saloonapp.Fragments.User.UserHistoryFragment;
@@ -133,9 +135,7 @@ public class UserDrawerActivity extends AppCompatActivity implements NavigationV
         } else if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-//            finishAffinity();
-            super.onBackPressed();
-            super.onBackPressed();
+            finishAffinity();
         }
     }
 
@@ -227,12 +227,18 @@ public class UserDrawerActivity extends AppCompatActivity implements NavigationV
             toolbarTitle = "History";
             value = false;
         } else if (id == R.id.nav_logout) {
-
+            logout();
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         setUpFragment(fragment, toolbarTitle);
         hideAndShowIcons(value);
         return true;
+    }
+
+    private void logout() {
+        SharedPreferences.Editor editor = getSharedPreferences("userDetails", MODE_PRIVATE).edit();
+        editor.clear().apply();
+        startActivity(new Intent(UserDrawerActivity.this, LoginActivity.class));
     }
 }
