@@ -1,6 +1,7 @@
 package com.example.saloonapp.Activities.Common;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,9 @@ import android.widget.Toast;
 import com.example.saloonapp.Activities.Parlour.ParlourDrawerActivity;
 import com.example.saloonapp.Activities.User.UserDrawerActivity;
 import com.example.saloonapp.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -49,12 +53,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
-        bindControls();
-        bindListeners();
-        setEditTextError();
-        disableCopyPaste();
+        if (!(checkIfAlreadyLoggedIn())) {
+            setContentView(R.layout.activity_login);
+            bindControls();
+            bindListeners();
+            setEditTextError();
+            disableCopyPaste();
+        }
+    }
+
+    private Boolean checkIfAlreadyLoggedIn() {
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
+        String email = sharedPreferences.getString("userName", null);
+        String pass = sharedPreferences.getString("pass", null);
+        if (email != null && pass != null) {
+            hitApiLogin(email, pass);
+            return true;
+        } else
+            return false;
     }
 
     private void bindControls() {
@@ -169,8 +186,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void hitApiLogin(String email, String pass) {
-        url = getString(R.string.url) + "token";
+    private void hitApiLogin(String email, final String pass) {
+        url = getString(R.string.url_token) + "token";
 
         JSON = MediaType.parse( "application/x-www-form-urlencoded; charset=utf-8" );
 
@@ -201,20 +218,58 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onResponse(Call call, final Response response) {
                 if (response.code() == 200) {
-                    try {
-                        saveUserData(response.body().string());
-                    } catch (IOException e) {
-                        Log.e("RESPONSE EXCEPTION", "hitApiLogin: onResponse: " + e );
-                    }
+                    saveUserData(response, pass);
                 } else {
-                    Toast.makeText(LoginActivity.this, "Network error, try again later.", Toast.LENGTH_SHORT).show();
-                    Log.e("ANOTHER STATUS CODE", "hitApiLogin: " + response.code() );
+                    Log.e("ANOTHER STATUS CODE", "hitApiLogin: " + response.code());
+                    try {
+                        final JSONObject jsonObject = new JSONObject(response.body().string());
+                        final String errorMsg = jsonObject.getString("error_description");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } catch (Exception e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(LoginActivity.this, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        Log.e("RESPONSE EXCEPTION", "hitApiLogin: onResponse: " + e);
+                    }
                 }
             }
         } );
     }
 
-    private void saveUserData(String string) {
+    private void saveUserData(Response response, String pass) {
+        try {
+            JSONObject jsonObject = new JSONObject(response.body().string());
+            SharedPreferences.Editor editor = getSharedPreferences("userDetails", MODE_PRIVATE).edit();
+            editor.putString("access_token", jsonObject.getString("access_token"));
+            editor.putString("roleName", jsonObject.getString("roleName"));
+            editor.putString("userName", jsonObject.getString("userName"));
+            editor.putString("fullName", jsonObject.getString("fullName"));
+            editor.putString("pass", pass);
+            editor.apply();
+
+            if (jsonObject.getString("roleName").equals("Parlour")){
+                startActivity(new Intent(LoginActivity.this, ParlourDrawerActivity.class));
+            } else if (jsonObject.getString("roleName").equals("Client")) {
+                startActivity(new Intent(LoginActivity.this, UserDrawerActivity.class));
+            }
+
+        } catch (Exception e) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(LoginActivity.this, "Network error, try again later", Toast.LENGTH_SHORT).show();
+                }
+            });
+            Log.e("EXCEPTION", "hitApiLogin: onResponse: " + e );
+        }
         //save data in shared preference
     }
 

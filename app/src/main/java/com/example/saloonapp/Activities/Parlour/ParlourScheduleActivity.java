@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Spinner;
@@ -115,6 +116,21 @@ public class ParlourScheduleActivity extends AppCompatActivity implements View.O
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onClick(View v) {
         if (v == doneBN) {
             getRecyclerViewValues();
@@ -206,8 +222,29 @@ public class ParlourScheduleActivity extends AppCompatActivity implements View.O
                     Toast.makeText( ParlourScheduleActivity.this, "Parlour account successfully created. Login to continue", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(ParlourScheduleActivity.this, "Network error, try again later.", Toast.LENGTH_SHORT).show();
-                    Log.e("ANOTHER STATUS CODE", "hitApiRegisterParlour: " + response.code() );
+                    try {
+                        Log.e("ANOTHER STATUS CODE", "hitApiRegisterParlour: onResponse: " + response.code() );
+                        JSONObject serverResponse = new JSONObject(response.body().string());
+                        final JSONArray errorMsg = serverResponse.getJSONObject("ModelState").getJSONArray("");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Toast.makeText(ParlourScheduleActivity.this, errorMsg.get(1).toString(), Toast.LENGTH_LONG).show();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    } catch (Exception e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(ParlourScheduleActivity.this, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        Log.e("RESPONSE EXCEPTION", "hitApiRegisterParlour: onResponse: " + e);
+                    }
                 }
             }
         } );

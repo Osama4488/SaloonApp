@@ -1,5 +1,7 @@
 package com.example.saloonapp.Activities.Parlour;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
+import com.example.saloonapp.Activities.Common.LoginActivity;
+import com.example.saloonapp.Activities.User.UserDrawerActivity;
 import com.example.saloonapp.Fragments.Parlour.BookingsFragment;
 import com.example.saloonapp.Fragments.Parlour.ExpertsFragment;
 import com.example.saloonapp.Fragments.Parlour.ParlourProfileFragment;
@@ -91,9 +95,7 @@ public class ParlourDrawerActivity extends AppCompatActivity implements Navigati
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-//            finishAffinity();
-            super.onBackPressed();
-            super.onBackPressed();
+            finishAffinity();
         }
     }
 
@@ -149,12 +151,18 @@ public class ParlourDrawerActivity extends AppCompatActivity implements Navigati
             fragment = new ServicesFragment();
             toolbarTitle = "Services";
         } else if (id == R.id.nav_logout) {
-
+            logout();
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         setUpFragment(fragment, toolbarTitle);
 
         return true;
+    }
+
+    private void logout() {
+        SharedPreferences.Editor editor = getSharedPreferences("userDetails", MODE_PRIVATE).edit();
+        editor.clear().apply();
+        startActivity(new Intent(ParlourDrawerActivity.this, LoginActivity.class));
     }
 }

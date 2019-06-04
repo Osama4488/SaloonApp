@@ -1,6 +1,7 @@
 package com.example.saloonapp.Fragments.Parlour;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -48,6 +49,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ExpertsFragment extends Fragment implements View.OnClickListener {
 
     public FloatingActionButton addExpertFAB;
@@ -55,6 +58,7 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
     public RecyclerView expertsRV;
     private AppCompatTextView titleTV;
     private String strUrl,strServerResponse,strToken,TAG = "Experts";
+    private SharedPreferences sharedPreferences;
 
     // Dialog Controls
     private AlertDialog addexpertDialog;
@@ -76,7 +80,8 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
         bindListeners();
        // dummyList();
 
-        strToken = getResources().getString( R.string.parlourToken );
+        sharedPreferences = getActivity().getSharedPreferences("userDetails", MODE_PRIVATE);
+        strToken = sharedPreferences.getString( "access_token",null );
         getExperts();
 
         return view;
@@ -119,7 +124,7 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(strUrl)
-                .addHeader( "key",strToken )
+                .addHeader( "Authorization","Bearer "+strToken )
                 .build();
 
 
@@ -231,15 +236,72 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
             }
             animateDialog(addexpertDialog);
         } else if (!(dialog_expertNameTIL.isErrorEnabled() && dialog_expertExpertiseTIL.isErrorEnabled() && dialog_expertExperienceTIL.isErrorEnabled())) {
-            expertsModelList.add(new ExpertsModel(
-                    null,
-                    expertName,
-                    expertExpertise,
-                    expertExperience
-            ));
-            setUpList();
-            addexpertDialog.dismiss();
+
+            addExperts(expertName,expertExpertise,expertExperience);
         }
+    }
+
+    public void addExperts(final String Name, final String Expertise, final String Experience) {
+        strUrl = getResources().getString( R.string.url ) + "experts";
+
+        MediaType JSON = MediaType.parse( "application/json; charset=utf-8" );
+        Map <String, String> params = new HashMap <String, String>();
+        params.put( "Name", Name );
+        params.put( "Expertise", Expertise );
+        params.put( "Experience", Experience );
+        JSONObject parameter = new JSONObject( params );
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = RequestBody.create( JSON, parameter.toString() );
+        Request request = new Request.Builder()
+                .url( strUrl )
+                .post( body )
+                .addHeader( "Authorization", "Bearer " + strToken )
+                .build();
+
+        client.newCall( request ).enqueue( new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                if (response.isSuccessful()) {
+                    strServerResponse = response.body().string();
+                    Log.e( TAG, "onResponse: " + strServerResponse );
+
+                    try {
+                        JSONObject object = new JSONObject( strServerResponse );
+
+                        expertsModelList.add( new ExpertsModel(
+                                object.getString( "Id" ),
+                                object.getString( "Name" ),
+                                object.getString( "Expertise" ),
+                                object.getString( "Experience" )
+                        ) );
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    getActivity().runOnUiThread( new Runnable() {
+                        @Override
+                        public void run() {
+                            setUpList();
+                            addexpertDialog.dismiss();
+                        }
+                    } );
+                } else {
+                    getActivity().runOnUiThread( new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText( getActivity(), "Network error, try again later", Toast.LENGTH_LONG ).show();
+                        }
+                    } );
+                    Log.e( TAG, "onResponse: " + strServerResponse );
+                }
+            }
+        } );
     }
 
     private void animateDialog(AlertDialog dialog) {
