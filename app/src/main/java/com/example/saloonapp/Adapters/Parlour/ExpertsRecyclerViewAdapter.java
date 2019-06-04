@@ -1,7 +1,9 @@
 package com.example.saloonapp.Adapters.Parlour;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -15,6 +17,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +28,23 @@ import android.widget.Toast;
 import com.example.saloonapp.Models.ExpertsModel;
 import com.example.saloonapp.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ExpertsRecyclerViewAdapter extends RecyclerView.Adapter<ExpertsRecyclerViewAdapter.ItemExpertViewHolder> implements View.OnClickListener {
 
@@ -33,6 +52,9 @@ public class ExpertsRecyclerViewAdapter extends RecyclerView.Adapter<ExpertsRecy
     private List<ExpertsModel> expertsModelList;
     public RecyclerView expertsRV;
     private AppCompatTextView titleTV;
+    private String strUrl,strToken,TAG = "Expert Adapter";
+    private SharedPreferences sharedPreferences;
+
 
     // Dialog Controls
     private AlertDialog updateExpertDialog;
@@ -88,14 +110,54 @@ public class ExpertsRecyclerViewAdapter extends RecyclerView.Adapter<ExpertsRecy
     }
 
     private void deleteExpertAtPosition(int position) {
-        expertsModelList.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, expertsModelList.size());
-        if (expertsModelList.size() == 0) {
-            controlsVisibility(View.VISIBLE);
-        } else {
-            controlsVisibility(View.GONE);
-        }
+
+        deleteExpert(expertsModelList.get( position ).getExpertId(),position);
+
+    }
+
+    public void deleteExpert(final String Id, final int position) {
+        strUrl = activity.getResources().getString( R.string.url ) + "experts/"+Id;
+        sharedPreferences = activity.getSharedPreferences("userDetails", MODE_PRIVATE);
+        strToken = sharedPreferences.getString( "access_token",null );
+
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url( strUrl )
+                .delete()
+                .addHeader( "Authorization", "Bearer " + strToken )
+                .build();
+
+        client.newCall( request ).enqueue( new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                if (response.isSuccessful()) {
+                    expertsModelList.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, expertsModelList.size());
+                    if (expertsModelList.size() == 0) {
+                        controlsVisibility(View.VISIBLE);
+                    } else {
+                        controlsVisibility(View.GONE);
+                    }
+
+                } else {
+                    activity.runOnUiThread( new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText( activity, "Network error, try again later", Toast.LENGTH_LONG ).show();
+                        }
+                    } );
+                    Log.e( TAG, "onResponse: " + response.code() );
+                }
+            }
+        } );
     }
 
     private void controlsVisibility(int visibliltiy) {
@@ -105,6 +167,7 @@ public class ExpertsRecyclerViewAdapter extends RecyclerView.Adapter<ExpertsRecy
         } else {
             titleTV.setVisibility(View.GONE);
             expertsRV.setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -149,6 +212,7 @@ public class ExpertsRecyclerViewAdapter extends RecyclerView.Adapter<ExpertsRecy
                 .animate()
                 .translationX(16f)
                 .setInterpolator(new CycleInterpolator(7f));
+
     }
 
     private void showUpdateExpertDialog(int position) {

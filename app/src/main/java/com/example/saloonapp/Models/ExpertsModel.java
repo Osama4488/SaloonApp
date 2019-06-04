@@ -1,19 +1,19 @@
 package com.example.saloonapp.Models;
 
 public class ExpertsModel {
-    private Integer expertId;
+    private String expertId;
     private String expertName;
     private String expertExpertise;
     private String expertExperience;
 
-    public ExpertsModel(Integer expertId, String expertName, String expertExpertise, String expertExperience) {
+    public ExpertsModel(String expertId, String expertName, String expertExpertise, String expertExperience) {
         this.expertId = expertId;
         this.expertName = expertName;
         this.expertExpertise = expertExpertise;
         this.expertExperience = expertExperience;
     }
 
-    public Integer getExpertId() {
+    public String getExpertId() {
         return expertId;
     }
 

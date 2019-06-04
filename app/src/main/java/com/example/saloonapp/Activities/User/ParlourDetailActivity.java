@@ -76,7 +76,7 @@ public class ParlourDetailActivity extends AppCompatActivity implements View.OnC
         expertsModelList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             expertsModelList.add(new ExpertsModel(
-                    i,
+                    "",
                     "Expert Name " + i,
                     "Expert Expertise " + i,
                     String.valueOf(i)
