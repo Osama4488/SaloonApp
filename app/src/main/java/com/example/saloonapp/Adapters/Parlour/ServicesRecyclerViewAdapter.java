@@ -33,6 +33,8 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
 
     private Activity activity;
     private List<ServicesModel> servicesModelList;
+    public RecyclerView serviceRV;
+    private AppCompatTextView titleTV;
 
     // Dialog Controls
     private AlertDialog updateServiceDialog;
@@ -43,11 +45,12 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
     private AppCompatImageButton dialog_closeIB;
     private int servicePosition;
 
-    public ServicesRecyclerViewAdapter(Activity activity, List<ServicesModel> servicesModelList) {
+    public ServicesRecyclerViewAdapter(Activity activity, List<ServicesModel> servicesModelList, RecyclerView serviceRV, AppCompatTextView titleTV) {
         this.activity = activity;
         this.servicesModelList = servicesModelList;
+        this.serviceRV = serviceRV;
+        this.titleTV = titleTV;
     }
-
 
     @NonNull
     @Override
@@ -97,6 +100,21 @@ public class ServicesRecyclerViewAdapter extends RecyclerView.Adapter<ServicesRe
         servicesModelList.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, servicesModelList.size());
+        if (servicesModelList.size() == 0) {
+            controlsVisibility(View.VISIBLE);
+        } else {
+            controlsVisibility(View.GONE);
+        }
+    }
+
+    private void controlsVisibility(int visibliltiy) {
+        if (View.VISIBLE == visibliltiy) {
+            titleTV.setVisibility(View.VISIBLE);
+            serviceRV.setVisibility(View.GONE);
+        } else {
+            titleTV.setVisibility(View.GONE);
+            serviceRV.setVisibility(View.VISIBLE);
+        }
     }
 
     private void updateServiceAtPosition(int position) {

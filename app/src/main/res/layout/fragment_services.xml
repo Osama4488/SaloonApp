@@ -7,6 +7,7 @@
     tools:context=".Fragments.Parlour.ServicesFragment">
 
     <RelativeLayout
+        android:id="@+id/controlsRL"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -15,11 +16,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/services_frag_titleTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="'+' to add a service"
+            android:gravity="center"
+            style="@style/LargeTVPrimary"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/services_frag_addServiceFAB"
-        app:layout_anchor="@id/services_frag_RV"
+        app:layout_anchor="@id/controlsRL"
         app:layout_anchorGravity="bottom|right"
         android:layout_margin="10pt"
         app:backgroundTint="@color/colorPrimary"

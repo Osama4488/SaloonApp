@@ -32,6 +32,8 @@ public class SubServicesRecyclerViewAdapter extends RecyclerView.Adapter<SubServ
     private Activity activity;
     private String title;
     private List<SubServicesModel> subServicesModelList;
+    private RecyclerView subServicesRV;
+    private AppCompatTextView titleTV;
 
     // Dialog Controls
     private AlertDialog updateSubServiceDialog;
@@ -43,10 +45,12 @@ public class SubServicesRecyclerViewAdapter extends RecyclerView.Adapter<SubServ
 
     private int subServicePosition;
 
-    public SubServicesRecyclerViewAdapter(Activity activity, String title,  List<SubServicesModel> subServicesModelList) {
+    public SubServicesRecyclerViewAdapter(Activity activity, String title, List<SubServicesModel> subServicesModelList, RecyclerView subServicesRV, AppCompatTextView titleTV) {
         this.activity = activity;
         this.title = title;
         this.subServicesModelList = subServicesModelList;
+        this.subServicesRV = subServicesRV;
+        this.titleTV = titleTV;
     }
 
     @NonNull
@@ -90,6 +94,22 @@ public class SubServicesRecyclerViewAdapter extends RecyclerView.Adapter<SubServ
         subServicesModelList.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, subServicesModelList.size());
+        if (subServicesModelList.size() == 0) {
+            controlsVisibility(View.VISIBLE);
+        } else {
+            controlsVisibility(View.GONE);
+        }
+    }
+
+    private void controlsVisibility(int visibliltiy) {
+        if (View.VISIBLE == visibliltiy) {
+            titleTV.setVisibility(View.VISIBLE);
+            titleTV.setText("'+' to add " + title + " service");
+            subServicesRV.setVisibility(View.GONE);
+        } else {
+            titleTV.setVisibility(View.GONE);
+            subServicesRV.setVisibility(View.VISIBLE);
+        }
     }
 
     private void updateSubServiceAtPosition(int position) {

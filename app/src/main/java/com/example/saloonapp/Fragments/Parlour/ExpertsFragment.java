@@ -32,8 +32,8 @@ import java.util.List;
 public class ExpertsFragment extends Fragment implements View.OnClickListener {
 
     public FloatingActionButton addExpertFAB;
-    public RecyclerView expertsRV;
     private List<ExpertsModel> expertsModelList;
+    public RecyclerView expertsRV;
     private AppCompatTextView titleTV;
 
     // Dialog Controls
@@ -65,7 +65,7 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
 
     private void dummyList() {
         expertsModelList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             expertsModelList.add(new ExpertsModel(
                     i,
                     "Expert " + i,
@@ -73,12 +73,11 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
                     String.valueOf(i)
             ));
         }
-
         setUpList();
     }
 
     private void setUpList() {
-        if (expertsModelList.size() != 0) {
+        if (expertsModelList.size() == 0) {
             controlsVisibility(View.VISIBLE);
         } else {
             controlsVisibility(View.GONE);
@@ -100,8 +99,8 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void bindControls(View view) {
-        addExpertFAB = view.findViewById(R.id.experts_frag_addExpertFAB);
-        expertsRV = view.findViewById(R.id.experts_frag_RV);
+        addExpertFAB = view.findViewById(R.id.subService_addSubServiceFAB);
+        expertsRV = view.findViewById(R.id.subService_RV);
         titleTV = view.findViewById(R.id.experts_frag_titleTV);
     }
 
@@ -142,10 +141,6 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
                     expertExperience
             ));
             setUpList();
-//            ExpertsRecyclerViewAdapter adapter = new ExpertsRecyclerViewAdapter(getActivity(), expertsModelList);
-//            expertsRV.setHasFixedSize(true);
-//            expertsRV.setLayoutManager(new LinearLayoutManager(getActivity()));
-//            expertsRV.setAdapter(adapter);
             addexpertDialog.dismiss();
         }
     }
