@@ -31,6 +31,8 @@ public class ExpertsRecyclerViewAdapter extends RecyclerView.Adapter<ExpertsRecy
 
     private Activity activity;
     private List<ExpertsModel> expertsModelList;
+    public RecyclerView expertsRV;
+    private AppCompatTextView titleTV;
 
     // Dialog Controls
     private AlertDialog updateExpertDialog;
@@ -44,8 +46,9 @@ public class ExpertsRecyclerViewAdapter extends RecyclerView.Adapter<ExpertsRecy
     public ExpertsRecyclerViewAdapter(Activity activity, List<ExpertsModel> expertsModelList, RecyclerView expertsRV, AppCompatTextView titleTV) {
         this.activity = activity;
         this.expertsModelList = expertsModelList;
+        this.expertsRV = expertsRV;
+        this.titleTV = titleTV;
     }
-
 
     @NonNull
     @Override
@@ -88,6 +91,21 @@ public class ExpertsRecyclerViewAdapter extends RecyclerView.Adapter<ExpertsRecy
         expertsModelList.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, expertsModelList.size());
+        if (expertsModelList.size() == 0) {
+            controlsVisibility(View.VISIBLE);
+        } else {
+            controlsVisibility(View.GONE);
+        }
+    }
+
+    private void controlsVisibility(int visibliltiy) {
+        if (View.VISIBLE == visibliltiy) {
+            titleTV.setVisibility(View.VISIBLE);
+            expertsRV.setVisibility(View.GONE);
+        } else {
+            titleTV.setVisibility(View.GONE);
+            expertsRV.setVisibility(View.VISIBLE);
+        }
     }
 
     private void updateExpertAtPosition(int position) {

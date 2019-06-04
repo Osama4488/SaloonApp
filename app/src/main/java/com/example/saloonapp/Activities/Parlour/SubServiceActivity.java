@@ -35,8 +35,9 @@ public class SubServiceActivity extends AppCompatActivity implements View.OnClic
     private AppCompatTextView toolbarTitleTV;
 
     private FloatingActionButton addSubServiceFAB;
-    private RecyclerView subServicesRV;
     private List<SubServicesModel> subServicesModelList;
+    private RecyclerView subServicesRV;
+    private AppCompatTextView titleTV;
 
     // Dialog Controls
     private AlertDialog addSubServiceDialog;
@@ -68,8 +69,10 @@ public class SubServiceActivity extends AppCompatActivity implements View.OnClic
         toolbar = findViewById(R.id.toolbar);
         toolbarTitleTV = toolbar.findViewById(R.id.toolbarTitleTV);
 
-        addSubServiceFAB = findViewById(R.id.experts_frag_addExpertFAB);
-        subServicesRV = findViewById(R.id.experts_frag_RV);
+        addSubServiceFAB = findViewById(R.id.subService_addSubServiceFAB);
+        subServicesRV = findViewById(R.id.subService_RV);
+        titleTV = findViewById(R.id.subService_titleTV);
+
     }
 
     private void bindListeners() {
@@ -78,7 +81,7 @@ public class SubServiceActivity extends AppCompatActivity implements View.OnClic
 
     private void dummyList() {
         subServicesModelList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             subServicesModelList.add(new SubServicesModel(
                     i,
                     "Sub Service " + i,
@@ -86,12 +89,19 @@ public class SubServiceActivity extends AppCompatActivity implements View.OnClic
                     i * 100
             ));
         }
+        setUpList();
+    }
 
-        SubServicesRecyclerViewAdapter adapter = new SubServicesRecyclerViewAdapter(this, title, subServicesModelList);
-        subServicesRV.setHasFixedSize(true);
-        subServicesRV.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        subServicesRV.setAdapter(adapter);
-
+    private void setUpList() {
+        if (subServicesModelList.size() == 0) {
+            controlsVisibility(View.VISIBLE);
+        } else {
+            controlsVisibility(View.GONE);
+            SubServicesRecyclerViewAdapter adapter = new SubServicesRecyclerViewAdapter(this, title, subServicesModelList, subServicesRV, titleTV);
+            subServicesRV.setHasFixedSize(true);
+            subServicesRV.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            subServicesRV.setAdapter(adapter);
+        }
     }
 
     private void toolbarSetting() {
@@ -101,6 +111,17 @@ public class SubServiceActivity extends AppCompatActivity implements View.OnClic
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         toolbarTitleTV.setText(title.toUpperCase());
+    }
+
+    private void controlsVisibility(int visibliltiy) {
+        if (View.VISIBLE == visibliltiy) {
+            titleTV.setVisibility(View.VISIBLE);
+            titleTV.setText("'+' to add " + title + " service");
+            subServicesRV.setVisibility(View.GONE);
+        } else {
+            titleTV.setVisibility(View.GONE);
+            subServicesRV.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -154,10 +175,7 @@ public class SubServiceActivity extends AppCompatActivity implements View.OnClic
                     subServiceDescription,
                     Integer.valueOf(subServicePrice)
             ));
-            SubServicesRecyclerViewAdapter adapter = new SubServicesRecyclerViewAdapter(this, title, subServicesModelList);
-            subServicesRV.setHasFixedSize(true);
-            subServicesRV.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-            subServicesRV.setAdapter(adapter);
+            setUpList();
             addSubServiceDialog.dismiss();
         }
     }

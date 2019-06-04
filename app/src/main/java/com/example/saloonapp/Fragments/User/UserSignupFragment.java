@@ -361,8 +361,29 @@ public class UserSignupFragment extends Fragment implements View.OnClickListener
                     Toast.makeText( getActivity(), "User account successfully created. Login to continue", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(getActivity(), "Network error, try again later.", Toast.LENGTH_SHORT).show();
-                    Log.e("ANOTHER STATUS CODE", "hitApiRegisterClient: " + response.code() );
+                    try {
+                        JSONObject serverResponse = new JSONObject(response.body().string());
+                        final JSONArray errorMsg = serverResponse.getJSONObject("ModelState").getJSONArray("");
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Toast.makeText(getActivity(), errorMsg.get(1).toString(), Toast.LENGTH_SHORT).show();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        Log.e("ANOTHER STATUS CODE", "hitApiRegisterClient: onResponse: " + response.code() );
+                    } catch (Exception e) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), "Network error, try again later.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        Log.e("RESPONSE EXCEPTION", "hitApiRegisterClient: onResponse: " + e);
+                    }
                 }
             }
         } );

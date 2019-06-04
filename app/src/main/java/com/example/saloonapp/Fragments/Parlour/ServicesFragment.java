@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.CycleInterpolator;
 
+import com.example.saloonapp.Adapters.Parlour.ExpertsRecyclerViewAdapter;
 import com.example.saloonapp.Adapters.Parlour.ServicesRecyclerViewAdapter;
 import com.example.saloonapp.Models.ServicesModel;
 import com.example.saloonapp.R;
@@ -31,8 +33,9 @@ import java.util.List;
 public class ServicesFragment extends Fragment implements View.OnClickListener {
 
     public FloatingActionButton addServiceFAB;
-    public RecyclerView serviceRV;
     private List<ServicesModel> servicesModelList;
+    public RecyclerView serviceRV;
+    private AppCompatTextView titleTV;
 
     // Dialog Controls
     private AlertDialog addServiceDialog;
@@ -64,23 +67,41 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
 
     private void dummyList() {
         servicesModelList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             servicesModelList.add(new ServicesModel(
                     i,
                     "Service " + i
             ));
         }
+        setUpList();
+    }
 
-        ServicesRecyclerViewAdapter adapter = new ServicesRecyclerViewAdapter(getActivity(), servicesModelList);
-        serviceRV.setHasFixedSize(true);
-        serviceRV.setLayoutManager(new LinearLayoutManager(getActivity()));
-        serviceRV.setAdapter(adapter);
+    private void setUpList() {
+        if (servicesModelList.size() == 0) {
+            controlsVisibility(View.VISIBLE);
+        } else {
+            controlsVisibility(View.GONE);
+            ServicesRecyclerViewAdapter adapter = new ServicesRecyclerViewAdapter(getActivity(), servicesModelList, serviceRV, titleTV);
+            serviceRV.setHasFixedSize(true);
+            serviceRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+            serviceRV.setAdapter(adapter);
+        }
+    }
 
+    private void controlsVisibility(int visibliltiy) {
+        if (View.VISIBLE == visibliltiy) {
+            titleTV.setVisibility(View.VISIBLE);
+            serviceRV.setVisibility(View.GONE);
+        } else {
+            titleTV.setVisibility(View.GONE);
+            serviceRV.setVisibility(View.VISIBLE);
+        }
     }
 
     private void bindControls(View view) {
         addServiceFAB = view.findViewById(R.id.services_frag_addServiceFAB);
         serviceRV = view.findViewById(R.id.services_frag_RV);
+        titleTV = view.findViewById(R.id.services_frag_titleTV);
     }
 
     @Override
@@ -105,10 +126,7 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
                     (int) Math.random(),
                     serviceName
             ));
-            ServicesRecyclerViewAdapter adapter = new ServicesRecyclerViewAdapter(getActivity(), servicesModelList);
-            serviceRV.setHasFixedSize(true);
-            serviceRV.setLayoutManager(new LinearLayoutManager(getActivity()));
-            serviceRV.setAdapter(adapter);
+            setUpList();
             addServiceDialog.dismiss();
         }
     }

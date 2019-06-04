@@ -7,6 +7,7 @@
     tools:context=".Activities.Parlour.SubServiceActivity">
 
     <RelativeLayout
+        android:id="@+id/controlsRL"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -15,16 +16,28 @@
             layout="@layout/app_toolbar" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/experts_frag_RV"
+            android:id="@+id/subService_RV"
             android:layout_below="@id/toolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/subService_titleTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="'+' to add service"
+            android:gravity="center"
+            style="@style/LargeTVPrimary"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/experts_frag_addExpertFAB"
-        app:layout_anchor="@id/experts_frag_RV"
+        android:id="@+id/subService_addSubServiceFAB"
+        app:layout_anchor="@id/controlsRL"
         app:layout_anchorGravity="bottom|right"
         android:layout_margin="10pt"
         app:backgroundTint="@color/colorPrimary"
