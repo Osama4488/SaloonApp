@@ -22,6 +22,21 @@
             android:textAllCaps="true"
             android:textColor="@color/colorWhite"/>
 
+        <android.support.v7.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/toolbarSearchTV"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_bar"
+            android:drawableRight="@drawable/ic_back_arrow"
+            android:hint="Search..."
+            android:textColor="@color/colorBlack"
+            android:padding="3pt"
+            android:completionThreshold="1"
+            android:textColorHint="#cecece"
+            android:layout_marginRight="2pt"
+            android:visibility="gone"/>
+
     </android.support.v7.widget.Toolbar>
 
 </android.support.design.widget.AppBarLayout>

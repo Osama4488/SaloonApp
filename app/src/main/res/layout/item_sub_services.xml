@@ -57,7 +57,7 @@
                     android:textStyle="bold"/>
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/item_subServicePrice"
+                    android:id="@+id/item_expertExpertise"
                     android:layout_below="@id/item_subServiceName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/item_subServiceDescrption"
-                    android:layout_below="@id/item_subServicePrice"
+                    android:layout_below="@id/item_expertExpertise"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Description"
@@ -76,13 +76,6 @@
                     android:textStyle="italic"/>
 
             </RelativeLayout>
-
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_back_arrow"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"/>
 
         </RelativeLayout>
 

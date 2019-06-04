@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/item_parlourCV"
+        android:layout_margin="5pt"
+        app:strokeColor="@color/colorBlack"
+        app:strokeWidth="1sp"
+        app:cardCornerRadius="2pt"
+        android:background="@color/colorLightGray"
+        android:layout_width="match_parent"
+        android:layout_height="60pt">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/headerRL"
+                android:layout_width="match_parent"
+                android:background="@drawable/gradient"
+                android:layout_height="30pt">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/item_parlourNameTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2pt"
+                    android:text="Parlour Name"
+                    style="@style/LargeTVBlack"
+                    android:textAllCaps="true"
+                    android:layout_centerInParent="true"
+                    android:textStyle="bold"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_below="@id/headerRL"
+                android:layout_marginTop="2pt"
+                android:layout_marginLeft="5pt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/item_parlourNumberTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2pt"
+                    android:text="Number"
+                    android:drawableLeft="@drawable/ic_back_arrow"
+                    android:drawablePadding="3pt"
+                    style="@style/MediumTVBlack"
+                    android:textAllCaps="true"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/item_parlourRatingTV"
+                    android:layout_below="@id/item_parlourNumberTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rating"
+                    android:drawableLeft="@drawable/ic_back_arrow"
+                    android:drawablePadding="3pt"
+                    style="@style/MediumTVPrimary"
+                    android:gravity="center"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </android.support.design.card.MaterialCardView>
+
+</RelativeLayout>

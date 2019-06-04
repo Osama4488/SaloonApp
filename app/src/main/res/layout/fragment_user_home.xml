@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.User.UserHomeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/nearestRL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/user_home_nearestParlourTV"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_margin="2pt"
+                        android:text="Nearest Parlour"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/LargeTVBlack"/>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/user_home_nearestParlourSeeAllTV"
+                        android:layout_alignParentRight="true"
+                        android:text="See All >"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:layout_marginRight="2pt"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/MediumTVPrimary"/>
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/user_home_nearestParlourRV"
+                    android:layout_below="@id/nearestRL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/RecommendedRL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/user_home_recommendedParlourTV"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_margin="2pt"
+                        android:text="Recommended Parlour"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/LargeTVBlack"/>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/user_home_recommendedParlourSeeAllTV"
+                        android:layout_alignParentRight="true"
+                        android:text="See All >"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:layout_marginRight="2pt"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/MediumTVPrimary"/>
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/user_home_recommendedParlourRV"
+                    android:layout_below="@id/RecommendedRL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/allRL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/user_home_allParlourTV"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_margin="2pt"
+                        android:text="All Parlour"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/LargeTVBlack"/>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/user_home_allParlourSeeAllTV"
+                        android:layout_alignParentRight="true"
+                        android:text="See All >"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:layout_marginRight="2pt"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/MediumTVPrimary"/>
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/user_home_allParlourRV"
+                    android:layout_below="@id/allRL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

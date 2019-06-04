@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5pt">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_expertName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2pt"
+        android:text="Expert Name"
+        style="@style/LargeTVBlack"
+        android:textAllCaps="true"
+        android:textStyle="bold"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_expertExpertise"
+        android:layout_below="@id/item_expertName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2pt"
+        android:text="Expert Expertise"
+        style="@style/MediumTVBlack"
+        android:textAllCaps="true"
+        android:textStyle="bold"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_expertExperience"
+        android:layout_below="@id/item_expertExpertise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5pt"
+        android:text="Expert Experience"
+        style="@style/MediumTVBlack"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_below="@id/item_expertExperience"
+        android:layout_height="1dp"
+        android:background="@color/colorBlack"/>
+
+</RelativeLayout>
