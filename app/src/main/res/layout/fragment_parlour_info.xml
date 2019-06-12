@@ -16,7 +16,7 @@
         android:textStyle="bold"/>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/parlour_info_frag_parlourNumberTV"
+        android:id="@+id/appointment_parlourNumberTV"
         android:layout_below="@id/parlour_info_frag_parlourNameTV"
         android:layout_marginTop="3pt"
         android:layout_marginLeft="5pt"
@@ -26,8 +26,8 @@
         style="@style/MediumTVBlack"/>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/parlour_info_frag_parlourEmailTV"
-        android:layout_below="@id/parlour_info_frag_parlourNumberTV"
+        android:id="@+id/appointment_parlourEmailTV"
+        android:layout_below="@id/appointment_parlourNumberTV"
         android:layout_marginLeft="5pt"
         android:layout_marginTop="3pt"
         android:text="Parlour Email"
@@ -37,18 +37,8 @@
         style="@style/MediumTVBlack"/>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/parlour_info_frag_parlourBookingsTV"
-        android:layout_below="@id/parlour_info_frag_parlourEmailTV"
-        android:layout_marginLeft="5pt"
-        android:layout_marginTop="3pt"
-        android:text="Parlour Total Booking Completed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/MediumTVBlack"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/parlour_info_frag_parlourRatingTV"
-        android:layout_below="@id/parlour_info_frag_parlourBookingsTV"
+        android:id="@+id/appointment_parlourRatingTV"
+        android:layout_below="@id/appointment_parlourEmailTV"
         android:layout_marginLeft="5pt"
         android:layout_marginTop="3pt"
         android:text="Parlour Rating"
@@ -57,12 +47,30 @@
         style="@style/MediumTVPrimary"/>
 
     <android.support.v7.widget.AppCompatRatingBar
-        android:id="@+id/parlour_info_frag_parlourRB"
-        android:layout_below="@id/parlour_info_frag_parlourRatingTV"
+        android:id="@+id/appointment_parlourRB"
+        android:layout_below="@id/appointment_parlourRatingTV"
         android:layout_margin="5pt"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:numStars="5"
         android:stepSize="0.25"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/appointment_appointmentDetailsTV"
+        android:layout_below="@id/appointment_parlourRB"
+        android:layout_marginTop="5pt"
+        android:layout_centerHorizontal="true"
+        android:text="Working Days"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/MediumTVPrimary"
+        android:textAllCaps="true"
+        android:textStyle="bold"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/appointment_appointmentDetailsRV"
+        android:layout_below="@id/appointment_appointmentDetailsTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

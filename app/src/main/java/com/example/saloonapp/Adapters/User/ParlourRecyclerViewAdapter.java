@@ -37,7 +37,7 @@ public class ParlourRecyclerViewAdapter extends RecyclerView.Adapter<ParlourRecy
 
     @Override
     public void onBindViewHolder(@NonNull ItemParlourCardViewHolder itemParlourCardViewHolder, int position) {
-        ParlourModel item = parlourModelList.get(position);
+        final ParlourModel item = parlourModelList.get(position);
         if (item != null) {
             itemParlourCardViewHolder.parlourNameTV.setText(item.getParlourName());
             itemParlourCardViewHolder.parlourRatingTV.setText("Rating: " + item.getParlourRating());
@@ -45,7 +45,10 @@ public class ParlourRecyclerViewAdapter extends RecyclerView.Adapter<ParlourRecy
             itemParlourCardViewHolder.parlourCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    activity.startActivity(new Intent(activity, ParlourDetailActivity.class));
+                    Intent intent = new Intent(activity, ParlourDetailActivity.class);
+                    intent.putExtra("parlourId", item.getParlourId());
+                    activity.startActivity(intent);
+
                 }
             });
         }

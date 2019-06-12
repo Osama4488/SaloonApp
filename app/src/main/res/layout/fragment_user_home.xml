@@ -40,7 +40,7 @@
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/user_home_nearestParlourSeeAllTV"
                         android:layout_alignParentRight="true"
-                        android:text="See All >"
+                        android:text="See All >>"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:layout_marginRight="2pt"
                         android:layout_centerVertical="true"
@@ -89,7 +89,7 @@
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/user_home_recommendedParlourSeeAllTV"
                         android:layout_alignParentRight="true"
-                        android:text="See All >"
+                        android:text="See All >>"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:layout_marginRight="2pt"
                         android:layout_centerVertical="true"
@@ -138,7 +138,7 @@
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/user_home_allParlourSeeAllTV"
                         android:layout_alignParentRight="true"
-                        android:text="See All >"
+                        android:text="See All >>"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:layout_marginRight="2pt"
                         android:layout_centerVertical="true"

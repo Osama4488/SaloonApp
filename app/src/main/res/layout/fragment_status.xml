@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.User.ParlourSubServiceFragment">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/booking_status_titleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="List is empty."
+        android:gravity="center"
+        style="@style/LargeTVPrimary"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/booking_status_RV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

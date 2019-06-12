@@ -217,7 +217,7 @@ public class SubServicesRecyclerViewAdapter extends RecyclerView.Adapter<SubServ
                                     dialog_subServiceNameET.getText().toString(),
                                     dialog_subServiceDescriptionET.getText().toString(),
                                     subServicesModelList.get(position).getServiceId(),
-                                    Integer.valueOf(dialog_subServicePriceET.getText().toString())
+                                    dialog_subServicePriceET.getText().toString()
                             ));
                             notifyItemChanged(position);
                             notifyItemRangeChanged(position, subServicesModelList.size());

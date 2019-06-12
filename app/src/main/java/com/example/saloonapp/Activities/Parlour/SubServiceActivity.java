@@ -171,7 +171,7 @@ public class SubServiceActivity extends AppCompatActivity implements View.OnClic
                         jsonArray.getJSONObject(i).getString("Name"),
                         jsonArray.getJSONObject(i).getString("Description"),
                         jsonArray.getJSONObject(i).getString("ServiceId"),
-                        jsonArray.getJSONObject(i).getInt("Price")
+                        jsonArray.getJSONObject(i).getString("Price")
                 ));
             }
             runOnUiThread(new Runnable() {
@@ -333,7 +333,7 @@ public class SubServiceActivity extends AppCompatActivity implements View.OnClic
                     jsonObject.getString("Name"),
                     jsonObject.getString("Description"),
                     jsonObject.getString("ServiceId"),
-                    jsonObject.getInt("Price")
+                    jsonObject.getString("Price")
             ));
             runOnUiThread(new Runnable() {
                 @Override

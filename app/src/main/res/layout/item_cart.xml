@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/item_serviceCV"
+        android:layout_margin="5pt"
+        app:strokeColor="@color/colorBlack"
+        app:strokeWidth="1sp"
+        app:cardCornerRadius="2pt"
+        android:background="@color/colorLightGray"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5pt">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/item_parlourNameTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2pt"
+                android:text="Parlour Name"
+                style="@style/LargeTVPrimary"
+                android:textAllCaps="true"
+                android:textStyle="bold"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/item_subServicePriceTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                style="@style/MediumTVBlack"
+                android:textAllCaps="true"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/item_subServiceNameTV"
+                android:layout_below="@id/item_parlourNameTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2pt"
+                android:text="Sub Service Name"
+                style="@style/MediumTVBlack"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/item_subServiceNameTV">
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/item_minusIB"
+                    android:layout_margin="2pt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_back_arrow"
+                    android:clickable="false"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/item_qtyTV"
+                    android:layout_toRightOf="@id/item_minusIB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2pt"
+                    android:text="1"
+                    android:layout_centerVertical="true"
+                    style="@style/MediumTVBlack"/>
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/item_personIV"
+                    android:layout_margin="2pt"
+                    android:layout_toRightOf="@id/item_qtyTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_back_arrow"
+                    android:clickable="false"/>
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/item_plusIB"
+                    android:layout_margin="2pt"
+                    android:layout_toRightOf="@id/item_personIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_back_arrow"
+                    android:clickable="false"/>
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </android.support.design.card.MaterialCardView>
+
+</RelativeLayout>

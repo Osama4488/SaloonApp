@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/item_appointmentCV"
+        android:layout_margin="5pt"
+        app:strokeColor="@color/colorBlack"
+        app:strokeWidth="1sp"
+        app:cardCornerRadius="2pt"
+        android:background="@color/colorLightGray"
+        android:layout_width="match_parent"
+        android:layout_height="45pt">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.85"
+                android:orientation="vertical"
+                android:layout_marginLeft="5pt"
+                android:gravity="center_vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/item_parlourNameTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2pt"
+                    android:text="Parlour Name"
+                    style="@style/LargeTVPrimary"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/item_dayNameTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2pt"
+                    android:text="Day"
+                    style="@style/MediumTVBlack"
+                    android:textAllCaps="true"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/item_dateTimeTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date Time"
+                    style="@style/MediumTVBlack"/>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorBlack"/>
+
+            <LinearLayout
+                android:id="@+id/cancelLL"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.15"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/item_cancelIB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_back_arrow"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </android.support.design.card.MaterialCardView>
+
+</RelativeLayout>

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SaloonApp</string>
-    <string name="url">https://5ebcf0de.ngrok.io/api/</string>
-    <string name="url_token">https://5ebcf0de.ngrok.io/</string>
+    <string name="url">https://60eb42d9.ngrok.io/api/</string>
+    <string name="url_token">https://60eb42d9.ngrok.io/</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

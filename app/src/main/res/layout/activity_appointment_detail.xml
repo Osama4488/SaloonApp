@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorLightGray"
+    tools:context=".Activities.User.AppointmentDetailActivity">
+
+    <include
+        android:id="@+id/toolbarLayout"
+        layout="@layout/app_toolbar" />
+
+    <ScrollView
+        android:layout_below="@id/toolbarLayout"
+        android:layout_width="match_parent"
+        android:layout_above="@id/completeRL"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/statusRL"
+                android:layout_marginTop="10pt"
+                android:layout_width="match_parent"
+                android:background="@color/colorWhite"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/appointment_appointmnetStatusTV"
+                    android:layout_margin="5pt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status: "
+                    style="@style/MediumTVPrimary"/>
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_below="@id/appointment_appointmnetStatusTV"
+                    android:layout_marginLeft="2pt"
+                    android:layout_marginRight="2pt"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorLightGray"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/appointment_appointmnetDayTV"
+                    android:layout_below="@id/view"
+                    android:layout_margin="5pt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Day: "
+                    style="@style/MediumTVPrimary"/>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_below="@id/appointment_appointmnetDayTV"
+                    android:layout_marginLeft="2pt"
+                    android:layout_marginRight="2pt"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorLightGray"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/appointment_appointmnetDateTimeTV"
+                    android:layout_below="@id/view2"
+                    android:layout_margin="5pt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date: "
+                    style="@style/MediumTVPrimary"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/profileRL"
+                android:layout_marginTop="10pt"
+                android:layout_below="@id/statusRL"
+                android:background="@color/colorWhite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/appointment_parlourNameTV"
+                    android:layout_marginTop="5pt"
+                    android:layout_marginLeft="5pt"
+                    android:text="Parlour Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/LargeTVPrimary"
+                    android:textStyle="bold"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/appointment_parlourNumberTV"
+                    android:layout_below="@id/appointment_parlourNameTV"
+                    android:layout_marginTop="3pt"
+                    android:layout_marginLeft="5pt"
+                    android:text="Parlour Number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MediumTVBlack"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/appointment_parlourEmailTV"
+                    android:layout_below="@id/appointment_parlourNumberTV"
+                    android:layout_marginLeft="5pt"
+                    android:layout_marginTop="3pt"
+                    android:text="Parlour Email"
+                    android:textStyle="italic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MediumTVBlack"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/appointment_parlourRatingTV"
+                    android:layout_below="@id/appointment_parlourEmailTV"
+                    android:layout_marginLeft="5pt"
+                    android:layout_marginTop="3pt"
+                    android:text="Parlour Rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MediumTVPrimary"/>
+
+                <android.support.v7.widget.AppCompatRatingBar
+                    android:id="@+id/appointment_parlourRB"
+                    android:layout_below="@id/appointment_parlourRatingTV"
+                    android:layout_margin="5pt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:stepSize="0.25"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/appointment_appointmentDetailsTV"
+                    android:layout_below="@id/appointment_parlourRB"
+                    android:layout_marginTop="5pt"
+                    android:layout_centerHorizontal="true"
+                    android:text="Appointment Details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MediumTVPrimary"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/appointment_appointmentDetailsRV"
+                    android:layout_below="@id/appointment_appointmentDetailsTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <RelativeLayout
+                    android:id="@+id/totalRL"
+                    android:layout_below="@id/appointment_appointmentDetailsRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorLightGray"
+                    android:padding="3pt">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_marginTop="5pt"
+                        android:layout_marginLeft="5pt"
+                        android:text="Total"
+                        android:layout_alignParentLeft="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/LargeTVPrimary"
+                        android:textStyle="bold"
+                        android:textAllCaps="true"/>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/appointment_appointmentTotalTV"
+                        android:layout_marginTop="5pt"
+                        android:layout_marginLeft="5pt"
+                        android:text="RS."
+                        android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/LargeTVPrimary"
+                        android:textStyle="bold"
+                        android:textAllCaps="true"/>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/completeRL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:layout_alignParentBottom="true"
+        android:paddingTop="10pt"
+        android:paddingBottom="10pt">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/appointment_completeBN"
+            android:text="Complete"
+            android:layout_marginRight="5pt"
+            android:layout_marginLeft="5pt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/LoginSignupButtonStyle"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

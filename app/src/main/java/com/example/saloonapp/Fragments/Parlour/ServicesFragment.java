@@ -86,17 +86,6 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
         addServiceFAB.setOnClickListener(this);
     }
 
-//    private void dummyList() {
-//        servicesModelList = new ArrayList<>();
-//        for (int i = 0; i < 2; i++) {
-//            servicesModelList.add(new ServicesModel(
-//                    i,
-//                    "Service " + i
-//            ));
-//        }
-//        setUpList();
-//    }
-
     private void hitApiGetAllServices() {
         url = getString(R.string.url) + "services";
 
@@ -120,7 +109,7 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
                         Toast.makeText(getActivity(),"Network Error", Toast.LENGTH_LONG).show();
                     }
                 });
-                Log.e(TAG, "hitApiGetAllServices: " + e);
+                Log.e(TAG, "hitApiGetAllServices: onFailure:" + e);
             }
 
             @Override
@@ -253,7 +242,7 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
                         Toast.makeText(getActivity(),"Network Error", Toast.LENGTH_LONG).show();
                     }
                 });
-                Log.e(TAG, "hitApiAddServices: " + e);
+                Log.e(TAG, "hitApiAddServices: onFailure:" + e);
             }
 
             @Override

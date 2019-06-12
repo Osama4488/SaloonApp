@@ -1,13 +1,20 @@
 package com.example.saloonapp.Activities.User;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
@@ -30,9 +37,21 @@ import com.example.saloonapp.Fragments.User.UserHomeFragment;
 import com.example.saloonapp.Fragments.User.UserProfileFragment;
 import com.example.saloonapp.Models.ParlourModel;
 import com.example.saloonapp.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
+import org.json.JSONArray;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class UserDrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener {
 
@@ -52,6 +71,10 @@ public class UserDrawerActivity extends AppCompatActivity implements NavigationV
 
     private List<ParlourModel> allModelList;
 
+    //Api Strings
+    private String url, TAG = "USER_DRAWER_ACTIVITY";
+    private OkHttpClient client;
+    private Request request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,29 +84,112 @@ public class UserDrawerActivity extends AppCompatActivity implements NavigationV
         bindControls();
         bindListeners();
         toolbarSetting();
-        setUpSearhBarList();
+        hitApiGetAllParlours();
         setUpHomePage();
     }
 
-    private void setUpSearhBarList() {
-        allModelList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            allModelList.add(new ParlourModel(
-                    i,
-                    "All " + i,
-                    (double) i,
-                    String.valueOf(i)
-            ));
-        }
-        SearchAutoCompleteAdapter adapter = new SearchAutoCompleteAdapter(UserDrawerActivity.this, R.layout.item_search_bar, allModelList);
-        toolbarSearchTV.setAdapter(adapter);
-        toolbarSearchTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(UserDrawerActivity.this, allModelList.get(position).getParlourName()+"", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private String getToken(){
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("access_token", null);
     }
+
+    private void hitApiGetAllParlours() {
+        url = getString(R.string.url) + "parlours";
+
+        client = new OkHttpClient.Builder()
+                .build();
+
+        request = new Request.Builder()
+                .url( url )
+                .header("Authorization", "Bearer " + getToken())
+                .get()
+                .build();
+        client.newCall( request ).enqueue( new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(UserDrawerActivity.this,"Network Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+                Log.e(TAG, "hitApiGetAllParlours: onFailure: " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                if (response.code() == 200){
+                    setUpSearhBarList(response);
+                } else {
+                    Log.e(TAG, "hitApiGetAllParlours : onResponse: " + response.code());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(UserDrawerActivity.this, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        } );
+    }
+
+    private void setUpSearhBarList(Response response) {
+        try {
+            allModelList = new ArrayList<>();
+            JSONArray jsonArray = new JSONArray(response.body().string());
+            for (int i = 0; i < jsonArray.length(); i++) {
+                allModelList.add(new ParlourModel(
+                        jsonArray.getJSONObject(i).getString("Id"),
+                        jsonArray.getJSONObject(i).getString("FullName"),
+                        jsonArray.getJSONObject(i).getDouble("Rating"),
+                        jsonArray.getJSONObject(i).getString("PhoneNumber"),
+                        jsonArray.getJSONObject(i).getDouble("Latitude"),
+                        jsonArray.getJSONObject(i).getDouble("Longitude")
+                ));
+            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    SearchAutoCompleteAdapter adapter = new SearchAutoCompleteAdapter(UserDrawerActivity.this, R.layout.item_search_bar, allModelList);
+                    toolbarSearchTV.setAdapter(adapter);
+                    toolbarSearchTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Toast.makeText(UserDrawerActivity.this, allModelList.get(position).getParlourName()+"", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+        } catch (Exception e) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(UserDrawerActivity.this, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                }
+            });
+            Log.e(TAG, "castParloursToList: " + e);
+        }
+    }
+
+//    private void setUpSearhBarList() {
+//        allModelList = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            allModelList.add(new ParlourModel(
+//                    i,
+//                    "All " + i,
+//                    (double) i,
+//                    String.valueOf(i)
+//            ));
+//        }
+//        SearchAutoCompleteAdapter adapter = new SearchAutoCompleteAdapter(UserDrawerActivity.this, R.layout.item_search_bar, allModelList);
+//        toolbarSearchTV.setAdapter(adapter);
+//        toolbarSearchTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(UserDrawerActivity.this, allModelList.get(position).getParlourName()+"", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
     private void setUpHomePage() {
         navigationView.setCheckedItem(R.id.nav_home);
@@ -187,6 +293,8 @@ public class UserDrawerActivity extends AppCompatActivity implements NavigationV
             hideAndShowIcons(false);
             toolbarSearchTV.setVisibility(View.VISIBLE);
             toolbarTitleTV.setVisibility(View.GONE);
+        } else if (id == R.id.action_cart) {
+            startActivity(new Intent(UserDrawerActivity.this, CartActivity.class));
         }
 
 
