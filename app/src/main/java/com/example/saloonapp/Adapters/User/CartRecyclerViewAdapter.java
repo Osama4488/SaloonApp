@@ -100,7 +100,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
     public void deleteDialog(final String subServiceName, final int position) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
         alertDialogBuilder.setTitle("Remove Service?");
-        alertDialogBuilder.setMessage("Are you sure, You want to remove " + subServiceName.toUpperCase() + " from cart?");
+        alertDialogBuilder.setMessage("Are you sure, You want to remove " + subServiceName.toUpperCase() + " from ic_cart?");
         alertDialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

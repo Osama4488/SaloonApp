@@ -14,7 +14,7 @@
     <ScrollView
         android:layout_below="@id/toolbarLayout"
         android:layout_width="match_parent"
-        android:layout_above="@id/completeRL"
+        android:layout_above="@id/appointment_completeRL"
         android:layout_height="match_parent">
 
         <RelativeLayout
@@ -83,7 +83,18 @@
                 android:layout_height="wrap_content">
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/appointment_parlourProfileTV"
+                    android:layout_centerHorizontal="true"
+                    android:text="Information"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MediumTVPrimary"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"/>
+
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/appointment_parlourNameTV"
+                    android:layout_below="@+id/appointment_parlourProfileTV"
                     android:layout_marginTop="5pt"
                     android:layout_marginLeft="5pt"
                     android:text="Parlour Name"
@@ -118,7 +129,7 @@
                     android:layout_below="@id/appointment_parlourEmailTV"
                     android:layout_marginLeft="5pt"
                     android:layout_marginTop="3pt"
-                    android:text="Parlour Rating"
+                    android:text="Rating: "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/MediumTVPrimary"/>
@@ -155,12 +166,10 @@
                     android:layout_below="@id/appointment_appointmentDetailsRV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorLightGray"
-                    android:padding="3pt">
+                    android:background="@color/colorDarkGray"
+                    android:padding="4pt">
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:layout_marginTop="5pt"
-                        android:layout_marginLeft="5pt"
                         android:text="Total"
                         android:layout_alignParentLeft="true"
                         android:layout_width="wrap_content"
@@ -171,8 +180,6 @@
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/appointment_appointmentTotalTV"
-                        android:layout_marginTop="5pt"
-                        android:layout_marginLeft="5pt"
                         android:text="RS."
                         android:layout_alignParentRight="true"
                         android:layout_width="wrap_content"
@@ -190,13 +197,14 @@
     </ScrollView>
 
     <RelativeLayout
-        android:id="@+id/completeRL"
+        android:id="@+id/appointment_completeRL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
         android:layout_alignParentBottom="true"
         android:paddingTop="10pt"
-        android:paddingBottom="10pt">
+        android:paddingBottom="10pt"
+        android:visibility="gone">
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/appointment_completeBN"

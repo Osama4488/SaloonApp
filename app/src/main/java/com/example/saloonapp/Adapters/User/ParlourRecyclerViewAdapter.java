@@ -54,6 +54,11 @@ public class ParlourRecyclerViewAdapter extends RecyclerView.Adapter<ParlourRecy
         }
     }
 
+    public void filterList(List<ParlourModel> filteredList){
+        parlourModelList = filteredList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return parlourModelList.size();

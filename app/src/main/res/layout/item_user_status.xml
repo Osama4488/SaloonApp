@@ -7,7 +7,7 @@
     <android.support.design.card.MaterialCardView
         android:id="@+id/item_appointmentCV"
         android:layout_margin="5pt"
-        app:strokeColor="@color/colorBlack"
+        app:strokeColor="@color/colorPrimaryDark"
         app:strokeWidth="1sp"
         app:cardCornerRadius="2pt"
         android:background="@color/colorLightGray"
@@ -60,7 +60,7 @@
                 android:id="@+id/view"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/colorBlack"/>
+                android:background="@color/colorPrimaryDark"/>
 
             <LinearLayout
                 android:id="@+id/cancelLL"
@@ -76,7 +76,8 @@
                     android:layout_height="wrap_content"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_back_arrow"
+                    android:src="@drawable/ic_delete"
+                    android:tint="@color/colorPrimaryDark"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
 

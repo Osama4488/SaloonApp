@@ -310,7 +310,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 mPlace.setRating(place.getRating());
                 Log.d(Tag, "onResult: rating: " + place.getRating());
                 mPlace.setPhoneNumber(place.getPhoneNumber().toString());
-                Log.d(Tag, "onResult: phone number: " + place.getPhoneNumber());
+                Log.d(Tag, "onResult: ic_phone number: " + place.getPhoneNumber());
                 mPlace.setWebsiteUri(place.getWebsiteUri());
                 Log.d(Tag, "onResult: website uri: " + place.getWebsiteUri());
                 Log.d(Tag, "onResult: place: " + mPlace.toString());

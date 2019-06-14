@@ -22,7 +22,7 @@
     </style>
 
     <style name="BookButtonStyle" parent="Base.Widget.AppCompat.Button.Colored">
-        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:background">@drawable/round_button_book</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>

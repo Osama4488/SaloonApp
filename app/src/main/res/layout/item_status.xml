@@ -7,7 +7,7 @@
     <android.support.design.card.MaterialCardView
         android:id="@+id/item_bookingCV"
         android:layout_margin="5pt"
-        app:strokeColor="@color/colorBlack"
+        app:strokeColor="@color/colorPrimaryDark"
         app:strokeWidth="1sp"
         app:cardCornerRadius="2pt"
         android:background="@color/colorLightGray"
@@ -60,7 +60,7 @@
                 android:id="@+id/view"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/colorBlack"/>
+                android:background="@color/colorPrimaryDark"/>
 
             <LinearLayout
                 android:id="@+id/acceptRejectLL"
@@ -84,7 +84,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/ic_back_arrow"
+                        android:src="@drawable/ic_check"
+                        android:tint="@color/colorWhite"
                         android:clickable="false"/>
 
                 </LinearLayout>
@@ -92,10 +93,10 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorBlack"/>
+                    android:background="@color/colorPrimaryDark"/>
 
                 <LinearLayout
-                    android:id="@+id/rejecttLL"
+                    android:id="@+id/rejectLL"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight=".5"
@@ -108,7 +109,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/ic_back_arrow"
+                        android:src="@drawable/ic_close"
+                        android:tint="@color/colorWhite"
                         android:clickable="false"/>
 
                 </LinearLayout>

@@ -1,9 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     tools:context=".Activities.User.FiltersActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <include
+        android:id="@+id/toolbarLayout"
+        layout="@layout/app_toolbar" />
+
+    <ScrollView
+        android:layout_below="@id/toolbarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/filters_searchET"
+                android:layout_margin="5pt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:hint="Search Parlour..."
+                android:inputType="text"
+                android:textColor="@color/colorPrimary"
+                android:background="@drawable/filter_search_drawable"/>
+
+            <LinearLayout
+                android:id="@+id/filters_serviceAndSubServiceLL"
+                android:layout_below="@id/filters_searchET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="2pt"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="2pt"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/filters_serviceSP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/colorPrimaryDark"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="2pt"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/filters_subServiceSP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/colorPrimaryDark"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/filters_minAndMaxLL"
+                android:layout_below="@id/filters_serviceAndSubServiceLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="2pt"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="2pt"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/filters_minSP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/colorPrimaryDark"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="2pt"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/filters_maxSP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/colorPrimaryDark"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/filters_RV"
+                android:layout_below="@id/filters_minAndMaxLL"
+                android:layout_marginTop="5pt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

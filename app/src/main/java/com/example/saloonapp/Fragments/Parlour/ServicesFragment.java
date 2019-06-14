@@ -87,7 +87,7 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
     }
 
     private void hitApiGetAllServices() {
-        url = getString(R.string.url) + "services";
+        url = getString(R.string.url) + "services/byparlour";
 
         JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -215,8 +215,6 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
     private void hitApiAddServices(String serviceName) {
         url = getString(R.string.url) + "services";
 
-        JSON = MediaType.parse("application/json; charset=utf-8");
-
         client = new OkHttpClient.Builder()
                 .build();
 
@@ -227,7 +225,9 @@ public class ServicesFragment extends Fragment implements View.OnClickListener {
             Log.e(TAG, "hitApiAddServices: " + e);
         }
 
+        JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create( JSON, jsonObject.toString() );
+
         request = new Request.Builder()
                 .url( url )
                 .header("Authorization", "Bearer " + getToken())

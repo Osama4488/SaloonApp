@@ -23,7 +23,7 @@
             android:background="@android:color/transparent"
             android:foreground="?android:attr/selectableItemBackground"
             android:src="@drawable/ic_back_arrow"
-            android:tint="@color/colorPrimary"/>
+            android:tint="@color/colorPrimaryDark"/>
 
         <RelativeLayout
             android:id="@+id/map_searchRL"
@@ -41,7 +41,8 @@
                 android:layout_marginRight="3pt"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5pt"
-                android:src="@drawable/ic_search"/>
+                android:src="@drawable/ic_search"
+                app:tint="@color/colorPrimaryDark"/>
 
             <android.support.v7.widget.AppCompatAutoCompleteTextView
                 android:id="@+id/map_searchATV"
@@ -92,7 +93,7 @@
         app:elevation="4pt"
         app:backgroundTint="@color/colorWhite"
         android:src="@drawable/ic_current_location"
-        android:tint="@color/colorPrimary"/>
+        android:tint="@color/colorPrimaryDark"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

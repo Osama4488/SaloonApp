@@ -60,7 +60,8 @@
                     android:layout_height="wrap_content"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_back_arrow"
+                    android:src="@drawable/ic_minus"
+                    android:tint="@color/colorPrimaryDark"
                     android:clickable="false"/>
 
                 <android.support.v7.widget.AppCompatTextView
@@ -81,7 +82,8 @@
                     android:layout_height="wrap_content"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_back_arrow"
+                    android:src="@drawable/ic_person"
+                    android:tint="@color/colorPrimaryDark"
                     android:clickable="false"/>
 
                 <android.support.v7.widget.AppCompatImageButton
@@ -92,7 +94,8 @@
                     android:layout_height="wrap_content"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_back_arrow"
+                    android:src="@drawable/ic_plus"
+                    android:tint="@color/colorPrimaryDark"
                     android:clickable="false"/>
 
 

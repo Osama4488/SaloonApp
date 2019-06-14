@@ -122,7 +122,7 @@ public class SubServiceActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void hitApiGetAllSubServices(){
-        url = getString( R.string.url )+ "subservices?serviceid=" + serviceId;
+        url = getString( R.string.url )+ "subservices/byserviceid?serviceid=" + serviceId;
 
         client = new OkHttpClient.Builder()
                 .build();

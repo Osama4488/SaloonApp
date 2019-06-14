@@ -2,6 +2,7 @@ package com.example.saloonapp.Fragments.User;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatTextView;
@@ -21,13 +22,13 @@ import java.util.List;
 public class UserStatusFragment extends Fragment {
 
     private String status;
-    private List<BookingOrAppointmentModel> bookingOrAppointmentModelsList;
+    private List<BookingOrAppointmentModel> modelList;
     private RecyclerView statusRV;
     private AppCompatTextView titleTV;
 
-    public UserStatusFragment(List<BookingOrAppointmentModel> bookingOrAppointmentModelsList, String status) {
+    public UserStatusFragment(List<BookingOrAppointmentModel> modelList, String status) {
         this.status = status;
-        this.bookingOrAppointmentModelsList = bookingOrAppointmentModelsList;
+        this.modelList = modelList;
     }
 
     @Override
@@ -40,7 +41,7 @@ public class UserStatusFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_status, container, false);
 
         bindControls(view);
-        if (bookingOrAppointmentModelsList.size() == 0) {
+        if (modelList.size() == 0) {
             statusRV.setVisibility(View.GONE);
             titleTV.setVisibility(View.VISIBLE);
             if (status.equals("Scheduled")) {
@@ -62,7 +63,7 @@ public class UserStatusFragment extends Fragment {
     }
 
     private void setUpList() {
-        UserStatusRecyclerViewAdapter adapter = new UserStatusRecyclerViewAdapter(getActivity(), status, bookingOrAppointmentModelsList);
+        UserStatusRecyclerViewAdapter adapter = new UserStatusRecyclerViewAdapter(getActivity(), status, modelList);
         statusRV.setHasFixedSize(true);
         statusRV.setLayoutManager(new LinearLayoutManager(getActivity()));
         statusRV.setAdapter(adapter);

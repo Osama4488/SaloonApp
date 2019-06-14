@@ -110,14 +110,14 @@ public class ParlourSubServiceRecyclerViewAdapter extends RecyclerView.Adapter<P
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(activity, "Service added to cart", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, "Service added to ic_cart", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else if (response.code() == 409) {
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(activity, "Item already in cart", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, "Item already in ic_cart", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {

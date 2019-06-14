@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/item_parlourRL"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_parlourNameTV"
+        android:layout_marginTop="5pt"
+        android:layout_marginLeft="5pt"
+        android:text="Parlour Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/LargeTVPrimary"
+        android:textStyle="bold"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_parlourBookingsTV"
+        android:layout_below="@+id/item_parlourNameTV"
+        android:layout_marginTop="5pt"
+        android:layout_marginLeft="5pt"
+        android:text="Bookings Completed: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/MediumTVBlack"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_palourExpertsTV"
+        android:layout_below="@+id/item_parlourBookingsTV"
+        android:layout_marginTop="5pt"
+        android:layout_marginLeft="5pt"
+        android:text="Available Experts: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/MediumTVBlack"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_parlourRatingTV"
+        android:layout_below="@id/item_palourExpertsTV"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="5pt"
+        android:text="Rating: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/MediumTVPrimary"/>
+
+    <android.support.v7.widget.AppCompatRatingBar
+        android:id="@+id/item_parlourRB"
+        android:layout_below="@id/item_parlourRatingTV"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="5pt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="0.25"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="5pt"
+        android:layout_marginRight="5pt"
+        android:layout_below="@id/item_parlourRB"
+        android:background="@color/colorPrimaryDark"/>
+
+
+
+</RelativeLayout>

@@ -22,7 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_back_arrow"
-            android:backgroundTint="@color/colorBlack"/>
+            android:backgroundTint="@color/colorBlack"
+            app:tint="@color/colorPrimaryDark"/>
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/parlour_detail_parlourNameTV"

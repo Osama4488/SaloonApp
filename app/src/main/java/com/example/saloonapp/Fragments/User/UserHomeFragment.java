@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.example.saloonapp.Activities.User.ListOfParloursActivity;
 import com.example.saloonapp.Adapters.User.ParlourRecyclerViewAdapter;
 import com.example.saloonapp.Models.ParlourModel;
-import com.example.saloonapp.Models.RecommendedParlourModel;
+import com.example.saloonapp.Models.NearestParlourModel;
 import com.example.saloonapp.Models.Vincinetyformula;
 import com.example.saloonapp.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -50,7 +50,7 @@ public class UserHomeFragment extends Fragment implements View.OnClickListener {
     private AppCompatTextView nearestSeeAllTV, recommendedSeeAllTV, allSeeAllTV;
     private RecyclerView nearestRV, recommendedRV, allRV;
     private List<ParlourModel> reccomendedModelList, allModelList, tempNearestList;
-    private List<RecommendedParlourModel> nearestModelList;
+    private List<NearestParlourModel> nearestModelList;
 
     //Api Strings
     private String url, TAG = "USER_HOME_FRAGMENT";
@@ -169,7 +169,7 @@ public class UserHomeFragment extends Fragment implements View.OnClickListener {
                         jsonArray.getJSONObject(i).getDouble("Latitude"),
                         jsonArray.getJSONObject(i).getDouble("Longitude")
                 ));
-                nearestModelList.add(new RecommendedParlourModel(
+                nearestModelList.add(new NearestParlourModel(
                         new ParlourModel(
                                 jsonArray.getJSONObject(i).getString("Id"),
                                 jsonArray.getJSONObject(i).getString("FullName"),
@@ -195,9 +195,11 @@ public class UserHomeFragment extends Fragment implements View.OnClickListener {
                         jsonArray.getJSONObject(i).getDouble("Longitude")
                 ));
             }
-            Collections.sort(nearestModelList, new Comparator<RecommendedParlourModel>() {
+
+            //sort by location
+            Collections.sort(nearestModelList, new Comparator<NearestParlourModel>() {
                 @Override
-                public int compare(RecommendedParlourModel lhs, RecommendedParlourModel rhs) {
+                public int compare(NearestParlourModel lhs, NearestParlourModel rhs) {
                     if (lhs.getParlourDistance() < rhs.getParlourDistance()) return -1;
                     if (lhs.getParlourDistance() > rhs.getParlourDistance()) return 1;
                     return 0;
@@ -206,6 +208,15 @@ public class UserHomeFragment extends Fragment implements View.OnClickListener {
             for (int i = 0; i < nearestModelList.size(); i++) {
                 tempNearestList.add(nearestModelList.get(i).getParlourDetails());
             }
+
+            //Sort by name
+            Collections.sort(allModelList, new Comparator<ParlourModel>() {
+                @Override
+                public int compare(ParlourModel lhs, ParlourModel rhs) {
+                    return lhs.getParlourName().compareTo(rhs.getParlourName());
+                }
+            });
+
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

@@ -1,5 +1,6 @@
 package com.example.saloonapp.Activities.Common;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.TextInputLayout;
@@ -15,6 +16,7 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -40,13 +42,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private TextInputLayout emailTIL, passTIL;
     private AppCompatEditText emailET, passET;
-    private RadioButton userRB, parlourRB;
     private AppCompatButton loginBN;
-    private AppCompatTextView dontHaveAnAccountTV, userDrawer, parlourDrawer;
+    private AppCompatTextView dontHaveAnAccountTV;
+
+    private ProgressDialog progressDialog;
 
     //API strings
-    private String url;
-    private MediaType JSON;
+    private String url, TAG = "LOGIN_ACTIVITY";
     private OkHttpClient client;
     private Request request;
 
@@ -54,24 +56,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!(checkIfAlreadyLoggedIn())) {
-            setContentView(R.layout.activity_login);
-            bindControls();
-            bindListeners();
-            setEditTextError();
-            disableCopyPaste();
-        }
+        setContentView(R.layout.activity_login);
+        bindControls();
+        bindListeners();
+        setEditTextError();
+        disableCopyPaste();
+        setUpProgressBar();
     }
 
-    private Boolean checkIfAlreadyLoggedIn() {
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetails", MODE_PRIVATE);
-        String email = sharedPreferences.getString("userName", null);
-        String pass = sharedPreferences.getString("pass", null);
-        if (email != null && pass != null) {
-            hitApiLogin(email, pass);
-            return true;
-        } else
-            return false;
+    private void setUpProgressBar() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading please wait...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     private void bindControls() {
@@ -81,24 +79,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         emailET = findViewById(R.id.login_emailET);
         passET = findViewById(R.id.login_passET);
 
-        userRB = findViewById(R.id.login_userRB);
-        userRB.setChecked(true);
-        parlourRB = findViewById(R.id.login_parlorRB);
-
         loginBN = findViewById(R.id.login_loginBN);
 
         dontHaveAnAccountTV = findViewById(R.id.login_signupTV);
-        userDrawer = findViewById(R.id.userDrawer);
-        parlourDrawer = findViewById(R.id.parlourDrawer);
+
     }
 
     private void bindListeners() {
         loginBN.setOnClickListener(this);
-        userRB.setOnClickListener(this);
-        parlourRB.setOnClickListener(this);
         dontHaveAnAccountTV.setOnClickListener(this);
-        userDrawer.setOnClickListener(this);
-        parlourDrawer.setOnClickListener(this);
     }
 
     private void setEditTextError() {
@@ -160,14 +149,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             loginMethod();
         } else if (v == dontHaveAnAccountTV) {
             startActivity(new Intent(getApplicationContext(), SignupActivity.class));
-        } else if (v == userRB) {
-            onRadioButtonClicked(userRB);
-        } else if (v == parlourRB) {
-            onRadioButtonClicked(parlourRB);
-        } else if (v == userDrawer) {
-            startActivity(new Intent(getApplicationContext(), UserDrawerActivity.class));
-        } else if (v == parlourDrawer) {
-            startActivity(new Intent(getApplicationContext(), ParlourDrawerActivity.class));
         }
     }
 
@@ -187,22 +168,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void hitApiLogin(String email, final String pass) {
+        progressDialog.show();
         url = getString(R.string.url_token) + "token";
-
-        JSON = MediaType.parse( "application/x-www-form-urlencoded; charset=utf-8" );
 
         String urlURI = "username=" + email + "&Password=" + pass + "&grant_type=password";
 
         client = new OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(15, TimeUnit.SECONDS)
                 .build();
+
+        MediaType JSON = MediaType.parse( "application/x-www-form-urlencoded; charset=utf-8" );
         RequestBody body = RequestBody.create( JSON, urlURI );
+
         request = new Request.Builder()
                 .url( url )
                 .post( body )
                 .build();
+
         client.newCall( request ).enqueue( new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -210,9 +191,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void run() {
                         Toast.makeText( getApplicationContext(), "Network error", Toast.LENGTH_LONG ).show();
+                        progressDialog.dismiss();
                     }
                 } );
-                Log.e("SERVER FAILURE", "hitApiLogin: " + e);
+                Log.e(TAG, "hitApiLogin: onFailure: " + e);
             }
 
             @Override
@@ -220,7 +202,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (response.code() == 200) {
                     saveUserData(response, pass);
                 } else {
-                    Log.e("ANOTHER STATUS CODE", "hitApiLogin: " + response.code());
+                    Log.e(TAG, "hitApiLogin: onResponse: " + response.code());
                     try {
                         final JSONObject jsonObject = new JSONObject(response.body().string());
                         final String errorMsg = jsonObject.getString("error_description");
@@ -228,6 +210,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                                progressDialog.show();
                             }
                         });
                     } catch (Exception e) {
@@ -235,9 +218,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 Toast.makeText(LoginActivity.this, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                                progressDialog.show();
                             }
                         });
-                        Log.e("RESPONSE EXCEPTION", "hitApiLogin: onResponse: " + e);
+                        Log.e(TAG, "hitApiLogin: onResponse: " + e);
                     }
                 }
             }
@@ -252,8 +236,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             editor.putString("roleName", jsonObject.getString("roleName"));
             editor.putString("userName", jsonObject.getString("userName"));
             editor.putString("fullName", jsonObject.getString("fullName"));
+            editor.putString("rating", jsonObject.getString("rating"));
             editor.putString("pass", pass);
             editor.apply();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.show();
+                }
+            });
 
             if (jsonObject.getString("roleName").equals("Parlour")){
                 startActivity(new Intent(LoginActivity.this, ParlourDrawerActivity.class));
@@ -266,9 +258,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void run() {
                     Toast.makeText(LoginActivity.this, "Network error, try again later", Toast.LENGTH_SHORT).show();
+                    progressDialog.show();
                 }
             });
-            Log.e("EXCEPTION", "hitApiLogin: onResponse: " + e );
+            Log.e(TAG, "saveUserData: " + e);
         }
         //save data in shared preference
     }
@@ -279,17 +272,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else {
             return false;
         }
-    }
-
-    private void onRadioButtonClicked(View view) {
-        if (view == userRB){
-            userRB.setChecked(true);
-            parlourRB.setChecked(false);
-        } else if (view == parlourRB) {
-            userRB.setChecked(false);
-            parlourRB.setChecked(true);
-        }
-
     }
 
     private void enableEdittextError(TextInputLayout view, String errorMsg){

@@ -52,7 +52,7 @@ public class UserSignupFragment extends Fragment implements View.OnClickListener
     private AppCompatButton signupBN;
 
     //API strings
-    private String url;
+    private String url, TAG = "USER_SIGNUP_FRAGMENT";
     private MediaType JSON;
     private OkHttpClient client;
     private Request request;
@@ -320,9 +320,6 @@ public class UserSignupFragment extends Fragment implements View.OnClickListener
         JSON = MediaType.parse( "application/json; charset=utf-8" );
 
         client = new OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(15, TimeUnit.SECONDS)
                 .build();
         JSONObject jsonObject = new JSONObject();
         try {
@@ -332,7 +329,7 @@ public class UserSignupFragment extends Fragment implements View.OnClickListener
             jsonObject.put("Password", pass);
             jsonObject.put("ConfirmPassword", confirmPass);
         } catch (JSONException e) {
-            Log.e("JSON EXCEPTION", "hitApiRegisterClient: " + e);
+            Log.e(TAG, "hitApiRegisterClient: " + e);
         }
 
         RequestBody body = RequestBody.create( JSON, jsonObject.toString() );
@@ -350,7 +347,7 @@ public class UserSignupFragment extends Fragment implements View.OnClickListener
                         Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
                     }
                 });
-                Log.e("SERVER FAILURE", "hitApiRegisterClient: " + e);
+                Log.e(TAG, "hitApiRegisterClient: onFailure: " + e);
             }
 
             @Override
@@ -362,7 +359,7 @@ public class UserSignupFragment extends Fragment implements View.OnClickListener
                 }
                 else {
                     try {
-                        Log.e("ANOTHER STATUS CODE", "hitApiRegisterClient: onResponse: " + response.code() );
+                        Log.e(TAG, "hitApiRegisterClient: onResponse: " + response.code() );
                         JSONObject serverResponse = new JSONObject(response.body().string());
                         final JSONArray errorMsg = serverResponse.getJSONObject("ModelState").getJSONArray("");
                         getActivity().runOnUiThread(new Runnable() {
@@ -382,7 +379,7 @@ public class UserSignupFragment extends Fragment implements View.OnClickListener
                                 Toast.makeText(getActivity(), "Network error, try again later.", Toast.LENGTH_LONG).show();
                             }
                         });
-                        Log.e("RESPONSE EXCEPTION", "hitApiRegisterClient: onResponse: " + e);
+                        Log.e(TAG, "hitApiRegisterClient: onResponse: " + e);
                     }
                 }
             }

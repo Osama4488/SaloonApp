@@ -1,8 +1,13 @@
 package com.example.saloonapp.Adapters.User;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.card.MaterialCardView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -13,24 +18,40 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.saloonapp.Activities.Parlour.BookingDetailActivity;
+import com.example.saloonapp.Activities.User.AppointmentDetailActivity;
+import com.example.saloonapp.Activities.User.UserDrawerActivity;
 import com.example.saloonapp.Models.BookingOrAppointmentModel;
 import com.example.saloonapp.R;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class UserStatusRecyclerViewAdapter extends RecyclerView.Adapter<UserStatusRecyclerViewAdapter.ItemUserStatusViewHolder> {
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+public class    UserStatusRecyclerViewAdapter extends RecyclerView.Adapter<UserStatusRecyclerViewAdapter.ItemUserStatusViewHolder> {
 
     private Activity activity;
-    private List<BookingOrAppointmentModel> bookingOrAppointmentModelList;
-    private String status, TAG = "USER_STATUS_RV_ADAPTER";
+    private List<BookingOrAppointmentModel> modelList;
 
-    public UserStatusRecyclerViewAdapter(Activity activity, String status, List<BookingOrAppointmentModel> bookingOrAppointmentModelList) {
+    //Api Strings
+    private String url, status, TAG = "USER_STATUS_RV_ADAPTER";
+    private OkHttpClient client;
+    private Request request;
+
+    public UserStatusRecyclerViewAdapter(Activity activity, String status, List<BookingOrAppointmentModel> modelList) {
         this.activity = activity;
         this.status = status;
-        this.bookingOrAppointmentModelList = bookingOrAppointmentModelList;
+        this.modelList = modelList;
     }
 
     @NonNull
@@ -41,8 +62,8 @@ public class UserStatusRecyclerViewAdapter extends RecyclerView.Adapter<UserStat
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemUserStatusViewHolder itemUserStatusViewHolder, int position) {
-        BookingOrAppointmentModel item = bookingOrAppointmentModelList.get(position);
+    public void onBindViewHolder(@NonNull ItemUserStatusViewHolder itemUserStatusViewHolder, final int position) {
+        final BookingOrAppointmentModel item = modelList.get(position);
         if (item != null) {
             try {
                 String[] splitingDateTime = item.getDate().split("T");
@@ -66,7 +87,7 @@ public class UserStatusRecyclerViewAdapter extends RecyclerView.Adapter<UserStat
                 itemUserStatusViewHolder.dayNameTV.setText(finalDay);
                 itemUserStatusViewHolder.dateTimeTV.setText(finalDate + " | " + finalTime);
 
-                if (!(status.equals("Scheduled"))) {
+                if (!(item.getStatus().equalsIgnoreCase("pending"))) {
                     itemUserStatusViewHolder.cancelLL.setVisibility(View.GONE);
                     itemUserStatusViewHolder.view.setVisibility(View.GONE);
                 }
@@ -74,14 +95,17 @@ public class UserStatusRecyclerViewAdapter extends RecyclerView.Adapter<UserStat
                 itemUserStatusViewHolder.cancelIB.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(activity, "Canceled.", Toast.LENGTH_SHORT).show();
+                        cancelDialog(item);
                     }
                 });
 
                 itemUserStatusViewHolder.appointmentCV.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        Intent intent = new Intent(activity, AppointmentDetailActivity.class);
+                        intent.putExtra("bookingId", modelList.get(position).getBookingOrAppointmentId());
+                        intent.putExtra("parlourId", modelList.get(position).getParlourOrUserId()); // passing parlour id
+                        activity.startActivity(intent);
                     }
                 });
 
@@ -91,9 +115,90 @@ public class UserStatusRecyclerViewAdapter extends RecyclerView.Adapter<UserStat
         }
     }
 
+    public void cancelDialog(final BookingOrAppointmentModel item) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder.setTitle("CANCEL");
+        alertDialogBuilder.setMessage("Are you sure, you want to cancel this appointment?");
+        alertDialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                hitApiChangeStatus(item);
+                dialog.dismiss();
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private String getToken(){
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("access_token", null);
+    }
+
+    private void hitApiChangeStatus(BookingOrAppointmentModel item) {
+        url = activity.getString(R.string.url) + "bookings/status?id=" + item.getBookingOrAppointmentId() + "&parlourid=" + item.getParlourOrUserId() + "&statusname=canceled";
+
+        client = new OkHttpClient.Builder()
+                .build();
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create( JSON, "" );
+
+        request = new Request.Builder()
+                .url( url )
+                .header("Authorization", "Bearer " + getToken())
+                .put(body)
+                .build();
+
+        client.newCall( request ).enqueue( new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity,"Network Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+                Log.e(TAG, "hitApiChangeStatus: onFailure:" + e);
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                if (response.isSuccessful()){
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, "Appointment has been canceled", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    activity.finish();
+                    Intent intent = new Intent(activity, UserDrawerActivity.class);
+                    intent.putExtra("refresh", true);
+                    activity.startActivity(intent);
+                } else {
+                    Log.e(TAG, "hitApiChangeStatus: onResponse: " + response.code());
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, "Network error, try again later.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        } );
+    }
+
     @Override
     public int getItemCount() {
-        return bookingOrAppointmentModelList.size();
+        return modelList.size();
     }
 
     public class ItemUserStatusViewHolder extends RecyclerView.ViewHolder {

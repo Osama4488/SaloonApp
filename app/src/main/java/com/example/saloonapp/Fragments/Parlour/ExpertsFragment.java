@@ -117,7 +117,7 @@ public class ExpertsFragment extends Fragment implements View.OnClickListener {
     }
 
     public void hitApiGetAllExperts(){
-        url = getString(R.string.url) + "experts";
+        url = getString(R.string.url) + "experts/byparlour";
 
         client = new OkHttpClient.Builder()
                 .build();

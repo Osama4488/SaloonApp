@@ -52,7 +52,7 @@ public class ParlourScheduleActivity extends AppCompatActivity implements View.O
     private String name, email, contact, location, pass, confirmPass;
 
     //API strings
-    private String url;
+    private String url, TAG = "PARLOUR_SCHEDULE_ACTIVITY";
     private MediaType JSON;
     private OkHttpClient client;
     private Request request;
@@ -169,10 +169,8 @@ public class ParlourScheduleActivity extends AppCompatActivity implements View.O
         JSON = MediaType.parse( "application/json; charset=utf-8" );
 
         client = new OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(15, TimeUnit.SECONDS)
                 .build();
+
         JSONObject jsonObject = new JSONObject();
         try {
             JSONArray jsonArray = new JSONArray();
@@ -193,7 +191,7 @@ public class ParlourScheduleActivity extends AppCompatActivity implements View.O
             jsonObject.put("ConfirmPassword", confirmPass);
             jsonObject.put("ParlourTimings", jsonArray);
         } catch (JSONException e) {
-            Log.e("JSON EXCEPTION", "hitApiRegisterParlour: " + e);
+            Log.e(TAG, "hitApiRegisterParlour: " + e);
         }
 
         RequestBody body = RequestBody.create( JSON, jsonObject.toString() );
@@ -211,7 +209,7 @@ public class ParlourScheduleActivity extends AppCompatActivity implements View.O
                         Toast.makeText(ParlourScheduleActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
                     }
                 });
-                Log.e("SERVER FAILURE", ""+e);
+                Log.e(TAG, "hitApiRegisterParlour: onFailure: "+e);
             }
 
             @Override
@@ -223,7 +221,7 @@ public class ParlourScheduleActivity extends AppCompatActivity implements View.O
                 }
                 else {
                     try {
-                        Log.e("ANOTHER STATUS CODE", "hitApiRegisterParlour: onResponse: " + response.code() );
+                        Log.e(TAG, "hitApiRegisterParlour: onResponse: " + response.code() );
                         JSONObject serverResponse = new JSONObject(response.body().string());
                         final JSONArray errorMsg = serverResponse.getJSONObject("ModelState").getJSONArray("");
                         runOnUiThread(new Runnable() {
@@ -243,7 +241,7 @@ public class ParlourScheduleActivity extends AppCompatActivity implements View.O
                                 Toast.makeText(ParlourScheduleActivity.this, "Network error, try again later.", Toast.LENGTH_LONG).show();
                             }
                         });
-                        Log.e("RESPONSE EXCEPTION", "hitApiRegisterParlour: onResponse: " + e);
+                        Log.e(TAG, "hitApiRegisterParlour: onResponse: " + e);
                     }
                 }
             }

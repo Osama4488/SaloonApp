@@ -44,7 +44,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                style="@style/SmallTVBlack" />
+                style="@style/SmallTVBlack"
+                android:backgroundTint="@color/colorPrimaryDark"/>
 
         </LinearLayout>
 
@@ -68,6 +69,7 @@
                 android:layout_below="@id/parlour_schedule_fromFormatTV"
                 style="@style/SmallTVBlack"
                 android:gravity="right"
+                android:backgroundTint="@color/colorPrimaryDark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -104,6 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
+                android:backgroundTint="@color/colorPrimaryDark"
                 style="@style/SmallTVBlack" />
 
         </LinearLayout>
@@ -130,6 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
+                android:backgroundTint="@color/colorPrimaryDark"
                 style="@style/SmallTVBlack" />
 
         </LinearLayout>
@@ -141,7 +145,7 @@
         android:layout_below="@id/spinner2LL"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorBlack"/>
+        android:background="@color/colorPrimaryDark"/>
 
 
 

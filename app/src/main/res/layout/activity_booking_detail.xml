@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorLightGray"
-    tools:context=".Activities.Parlour.BookingDetailActivity">
+    tools:context=".Activities.user.BookingDetailActivity">
 
     <include
         android:id="@+id/toolbarLayout"
@@ -14,7 +14,7 @@
     <ScrollView
         android:layout_below="@id/toolbarLayout"
         android:layout_width="match_parent"
-        android:layout_above="@id/completeRL"
+        android:layout_above="@id/booking_acceptRejectLL"
         android:layout_height="match_parent">
 
         <RelativeLayout
@@ -46,7 +46,7 @@
                     android:background="@color/colorLightGray"/>
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/booking_appointmnetDayTV"
+                    android:id="@+id/booking_bookingDayTV"
                     android:layout_below="@id/view"
                     android:layout_margin="5pt"
                     android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
 
                 <View
                     android:id="@+id/view2"
-                    android:layout_below="@id/booking_appointmnetDayTV"
+                    android:layout_below="@id/booking_bookingDayTV"
                     android:layout_marginLeft="2pt"
                     android:layout_marginRight="2pt"
                     android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                     android:background="@color/colorLightGray"/>
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/booking_appointmnetDateTimeTV"
+                    android:id="@+id/booking_bookingDateTimeTV"
                     android:layout_below="@id/view2"
                     android:layout_margin="5pt"
                     android:layout_width="wrap_content"
@@ -83,7 +83,18 @@
                 android:layout_height="wrap_content">
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/booking_parlourNameTV"
+                    android:id="@+id/booking_userProfileTV"
+                    android:layout_centerHorizontal="true"
+                    android:text="Information"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MediumTVPrimary"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/booking_userNameTV"
+                    android:layout_below="@id/booking_userProfileTV"
                     android:layout_marginTop="5pt"
                     android:layout_marginLeft="5pt"
                     android:text="User Name"
@@ -93,8 +104,8 @@
                     android:textStyle="bold"/>
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/booking_parlourNumberTV"
-                    android:layout_below="@id/booking_parlourNameTV"
+                    android:id="@+id/booking_userNumberTV"
+                    android:layout_below="@id/booking_userNameTV"
                     android:layout_marginTop="3pt"
                     android:layout_marginLeft="5pt"
                     android:text="User Number"
@@ -103,8 +114,8 @@
                     style="@style/MediumTVBlack"/>
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/booking_parlourEmailTV"
-                    android:layout_below="@id/booking_parlourNumberTV"
+                    android:id="@+id/booking_userEmailTV"
+                    android:layout_below="@id/booking_userNumberTV"
                     android:layout_marginLeft="5pt"
                     android:layout_marginTop="3pt"
                     android:text="User Email"
@@ -115,7 +126,7 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/booking_bookingDetailsTV"
-                    android:layout_below="@id/booking_parlourEmailTV"
+                    android:layout_below="@id/booking_userEmailTV"
                     android:layout_marginTop="5pt"
                     android:layout_centerHorizontal="true"
                     android:text="booking Details"
@@ -136,12 +147,10 @@
                     android:layout_below="@id/booking_bookingDetailsRV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorLightGray"
-                    android:padding="3pt">
+                    android:background="@color/colorDarkGray"
+                    android:padding="4pt">
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:layout_marginTop="5pt"
-                        android:layout_marginLeft="5pt"
                         android:text="Total"
                         android:layout_alignParentLeft="true"
                         android:layout_width="wrap_content"
@@ -152,8 +161,6 @@
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/booking_bookingTotalTV"
-                        android:layout_marginTop="5pt"
-                        android:layout_marginLeft="5pt"
                         android:text="RS."
                         android:layout_alignParentRight="true"
                         android:layout_width="wrap_content"
@@ -170,24 +177,65 @@
 
     </ScrollView>
 
-    <RelativeLayout
-        android:id="@+id/completeRL"
+    <LinearLayout
+        android:id="@+id/booking_acceptRejectLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
         android:layout_alignParentBottom="true"
-        android:paddingTop="10pt"
-        android:paddingBottom="10pt">
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="2">
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/booking_completeBN"
-            android:text="Complete"
-            android:layout_marginRight="5pt"
-            android:layout_marginLeft="5pt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/LoginSignupButtonStyle"/>
+        <LinearLayout
+            android:id="@+id/booking_rejectLL"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="@color/colorRed"
+            android:paddingTop="10pt"
+            android:paddingBottom="10pt">
 
-    </RelativeLayout>
+            <android.support.v7.widget.AppCompatTextView
+                android:text="Reject"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:textAllCaps="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/booking_acceptLL"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="@color/colorGreen"
+            android:paddingTop="10pt"
+            android:paddingBottom="10pt">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:text="Accept"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:textAllCaps="true"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -7,7 +7,7 @@
     <android.support.design.card.MaterialCardView
         android:id="@+id/item_serviceCV"
         android:layout_margin="5pt"
-        app:strokeColor="@color/colorBlack"
+        app:strokeColor="@color/colorPrimaryDark"
         app:strokeWidth="1sp"
         app:cardCornerRadius="2pt"
         android:background="@color/colorLightGray"
@@ -26,7 +26,8 @@
                 android:layout_height="wrap_content"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_back_arrow"
+                android:tint="@color/colorPrimaryDark"
+                android:src="@drawable/ic_delete"
                 android:paddingRight="5pt"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"/>
@@ -35,7 +36,7 @@
                 android:layout_width="1dp"
                 android:layout_toRightOf="@id/item_deleteIB"
                 android:layout_height="match_parent"
-                android:background="@color/colorBlack"/>
+                android:background="@color/colorPrimaryDark"/>
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/item_serviceName"
@@ -52,7 +53,8 @@
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_back_arrow"
+                android:src="@drawable/ic_right_key"
+                android:tint="@color/colorPrimaryDark"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"/>
 

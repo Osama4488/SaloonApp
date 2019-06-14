@@ -9,7 +9,7 @@
         android:id="@+id/item_parlourCV"
         android:layout_width="72pt"
         android:layout_height="wrap_content"
-        app:strokeColor="@color/colorBlack"
+        app:strokeColor="@color/colorPrimaryDark"
         app:strokeWidth="1sp"
         app:cardCornerRadius="2pt"
         app:cardElevation="2pt"
@@ -52,7 +52,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2pt"
                     android:text="Number"
-                    android:drawableLeft="@drawable/ic_back_arrow"
+                    android:drawableLeft="@drawable/ic_phone"
+                    android:drawableTint="@color/colorPrimaryDark"
                     android:drawablePadding="3pt"
                     style="@style/MediumTVBlack"
                     android:textAllCaps="true"/>
@@ -63,7 +64,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rating"
-                    android:drawableLeft="@drawable/ic_back_arrow"
+                    android:drawableLeft="@drawable/ic_rating"
+                    android:drawableTint="@color/colorPrimaryDark"
                     android:drawablePadding="3pt"
                     style="@style/MediumTVPrimary"
                     android:gravity="center"/>
